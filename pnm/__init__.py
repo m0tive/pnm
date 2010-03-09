@@ -11,4 +11,7 @@ from application import *
 ## Start up function.
 #  Run once to start the application.
 def run ():
-  print "pnm has run away"
+	app = Application(foo="Hello World", bar=3.147)
+	print "pnm has run away"
+	app2 = Application(foo="hello")
+
