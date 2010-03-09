@@ -1,0 +1,17 @@
+*.pyc
+*.backup
+*.log
+*.old
+*.old?
+*.log.*
+ogre.cfg
+*~
+*.tmp
+backup.bzr
+*.orig
+*.moved
+ignore
+*.THIS
+*.OTHER
+*.BASE
+ignore
