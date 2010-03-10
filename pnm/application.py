@@ -21,14 +21,8 @@ class Application (object):
 		return cls.__inst
 		
 	def __setup(self):
-		## run setup...
-		
 		self.eventManager = EventManager()
-		self.eventManager.hook("ping")
-		self.eventManager.hook("ping")
-		#self.eventManager.indexEvents()
-	
 		Log().info("Application setup")
 		
 	def start(self):
-		Log().debug("Starting Application")
+		self.eventManager.hook("application_start")

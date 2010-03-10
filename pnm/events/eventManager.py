@@ -18,32 +18,35 @@ class EventManager (object):
 		
   ## Hook an event, if one exists.
   #  This fires and event if it exists in the _scripts folder.
-  #  @param etype - Event name.
+  #  @param event - Event name.
   #  @param data - Information to be sent to the event.
   #  @todo add note about data.
-	def hook(self, etype, data=None):
+	def hook(self, event, data=None):
 		if self.__indexed == False:
 			self.indexEvents()
 		
-		if etype in self.__events:
-			if etype not in self.__loadedEvents:
-				Log().debug("Loading event \'%s\' for the first time" % etype)
-				module = __import__(self.scriptDir, globals(), locals(), [etype])
-				self.__loadedEvents[etype] = module.__dict__[etype].e
-			return self.__loadedEvents[etype](self, data)
+		if event in self.__events:
+			if event not in self.__loadedEvents:
+				Log().debug("Loading event \'%s\' for the first time" % event)
+				module = __import__(self.scriptDir, globals(), locals(), [event])
+				self.__loadedEvents[event] = module.__dict__[event].e
+			return self.__loadedEvents[event](self, data)
 		
 		return None
 		
   ## Hook an event after a given delay.
 	#  @param delay - Time to wait before hooking the event
-  #  @param etype - Event name.
+  #  @param event - Event name.
   #  @param data - Information to be sent to the event.
-	def hook_delayed(self, delay, etype, data=None):
-		if etype in self.__events:
-			self.__delays.append([delay,etype,data])
+	def hook_delayed(self, delay, event, data=None):
+		if event in self.__events:
+			self.__delays.append([delay,event,data])
 			return True
 		return False
 		
+	def hasEvent(self,event):
+		return (event in self.__events)
+	
 	## Process the delayed event list
 	#  @param timeElapsed - The time passed since last update
 	def update(self, timeElapsed):
