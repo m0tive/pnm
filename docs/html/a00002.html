@@ -31,16 +31,16 @@
       <li><a href="functions.html"><span>Class&nbsp;Members</span></a></li>
     </ul>
   </div>
-  <div class="navpath"><a class="el" href="a00011.html">pnm</a>.<a class="el" href="a00013.html">events</a>.<a class="el" href="a00014.html">eventManager</a>.<a class="el" href="a00002.html">EventManager</a>
+  <div class="navpath"><a class="el" href="a00016.html">pnm</a>.<a class="el" href="a00018.html">events</a>.<a class="el" href="a00019.html">eventManager</a>.<a class="el" href="a00002.html">EventManager</a>
   </div>
 </div>
 <div class="contents">
-<h1>pnm.events.eventManager.EventManager Class Reference</h1><!-- doxytag: class="pnm::events::eventManager::EventManager" -->Event <a class="el" href="a00016.html">scripts</a> manager.  
+<h1>pnm.events.eventManager.EventManager Class Reference</h1><!-- doxytag: class="pnm::events::eventManager::EventManager" -->Event scripts manager.  
 <a href="#_details">More...</a>
 <p>
 
 <p>
-<a href="a00027.html">List of all members.</a><table border="0" cellpadding="0" cellspacing="0">
+<a href="a00037.html">List of all members.</a><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00002.html#4201b4f9ee0ca3a9a7d903111102adb0">__init__</a></td></tr>
@@ -52,6 +52,8 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00002.html#b8b5365ee5ffa348a47107bbc294e7d8">hook_delayed</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Hook an event after a given delay.  <a href="#b8b5365ee5ffa348a47107bbc294e7d8"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00002.html#38ec5588699caa985ccded249dba8acb">hasEvent</a></td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00002.html#3697f6c27ba0dfa35a902921788f07f1">update</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Process the delayed event list.  <a href="#3697f6c27ba0dfa35a902921788f07f1"></a><br></td></tr>
@@ -73,9 +75,9 @@
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
-Event <a class="el" href="a00016.html">scripts</a> manager. 
+Event scripts manager. 
 <p>
-<dl compact><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>create a generate script function that creates temp <a class="el" href="a00016.html">scripts</a> (which could be wrote to file on request) </dd></dl>
+<dl compact><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>create a generate script function that creates temp scripts (which could be wrote to file on request) </dd></dl>
 <hr><h2>Member Function Documentation</h2>
 <a class="anchor" name="4201b4f9ee0ca3a9a7d903111102adb0"></a><!-- doxytag: member="pnm::events::eventManager::EventManager::__init__" ref="4201b4f9ee0ca3a9a7d903111102adb0" args="" -->
 <div class="memitem">
@@ -99,6 +101,35 @@ Constructor.
 
 </div>
 </div><p>
+<a class="anchor" name="38ec5588699caa985ccded249dba8acb"></a><!-- doxytag: member="pnm::events::eventManager::EventManager::hasEvent" ref="38ec5588699caa985ccded249dba8acb" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def pnm.events.eventManager.EventManager.hasEvent           </td>
+          <td>(</td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>event</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
 <a class="anchor" name="62725315fb6eb32a5b9a9af60e80ad1a"></a><!-- doxytag: member="pnm::events::eventManager::EventManager::hook" ref="62725315fb6eb32a5b9a9af60e80ad1a" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -113,7 +144,7 @@ Constructor.
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&nbsp;</td>
-          <td class="paramname"> <em>etype</em>, </td>
+          <td class="paramname"> <em>event</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -135,7 +166,7 @@ Hook an event, if one exists.
 <p>
 This fires and event if it exists in the _scripts folder. <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>etype</em>&nbsp;</td><td>- Event name. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>event</em>&nbsp;</td><td>- Event name. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>data</em>&nbsp;</td><td>- Information to be sent to the event. </td></tr>
   </table>
 </dl>
@@ -163,7 +194,7 @@ This fires and event if it exists in the _scripts folder. <dl compact><dt><b>Par
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&nbsp;</td>
-          <td class="paramname"> <em>etype</em>, </td>
+          <td class="paramname"> <em>event</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -186,7 +217,7 @@ Hook an event after a given delay.
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>delay</em>&nbsp;</td><td>- Time to wait before hooking the event </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>etype</em>&nbsp;</td><td>- Event name. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>event</em>&nbsp;</td><td>- Event name. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>data</em>&nbsp;</td><td>- Information to be sent to the event. </td></tr>
   </table>
 </dl>
@@ -344,9 +375,9 @@ Regular expression for event function Open the file and check that the event fun
 </div>
 </div><p>
 <hr>The documentation for this class was generated from the following file:<ul>
-<li><a class="el" href="a00008.html">eventManager.py</a></ul>
+<li><a class="el" href="a00010.html">eventManager.py</a></ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Wed Mar 10 12:14:22 2010 for PNM by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Mar 10 17:45:32 2010 for PNM by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>
