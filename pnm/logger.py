@@ -24,8 +24,8 @@ class Log (object):
 			inst.__fileName = "pnm.log"
 			inst.__maxBytes = 1024 * 512 # 512kB
 			inst.__backups = 0
-			inst.__fileFormat = "(%(asctime)s) %(filename)s:%(lineno)d [%(levelname)s] %(message)s"
-			inst.__streamFormat = "%(filename)s:%(lineno)d [%(levelname)s] %(message)s"
+			inst.__streamFormat = "%(filename)s:%(lineno)d : %(levelname)s : %(message)s"
+			inst.__fileFormat = "(%(asctime)s) " + inst.__streamFormat
 					
 			## Process arguments...
 			for k in kwargs:

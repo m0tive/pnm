@@ -20,7 +20,14 @@ class SingletonApp (object):
 			Log().warning("SingletonApp arguments not used after creation")
 		return cls.__inst
 		
+	def __del__():
+		Log().info("SingletonApp deleted")
+		
 	def _setup(self):
 		self.eventManager = EventManager()
 		Log().debug("SingletonApp setup")
 		self.eventManager.hook("singletonApp_setup")
+		
+	def close(self):
+		del self.eventManager
+		Log().info("SingletonApp closed")
