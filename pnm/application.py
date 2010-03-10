@@ -1,6 +1,6 @@
 
+from logger import Log
 from events import eventManager
-from logger import *
 
 ## Singleton application class
 #
@@ -13,13 +13,17 @@ class Application (object):
 	def __new__(cls, **kwargs):
 		if not cls.__inst:
 			cls.__inst = super(Application,cls).__new__(cls)
+			## Initialise log and send info message
+			Log(level="DEBUG").info("Application instance created")
+			cls.__inst.__setup()
 		elif kwargs:
 			Log().warning("Application arguments not used after creation")
 		return cls.__inst
-
-	def __init__(self, **kwargs):
-		Log(level="debug")
-		for k in kwargs:
-			if k == "foo":
-				Log().warning("Hello World :3")
-				
+		
+	def __setup(self):
+		## run setup...
+	
+		Log().info("Application setup")
+		
+	def start(self):
+		Log().debug("Starting Application")

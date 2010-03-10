@@ -2,63 +2,85 @@
 import logging, logging.handlers
 import os, os.path
 
-## Singleton application class
+## Singleton logger class
 #
 #  Singleton pattern taken from post on Stackoverflow.com by "modi"
 #  http://stackoverflow.com/questions/42558/python-and-the-singleton-pattern/1810367#1810367
 #  Accessed: 9th March 2010
 class Log (object):
+	## Singleton instance
 	__inst = None
 
-	logger = None
-	__fName = "pnm.log"
-	__fHandler = None
-	__sHandler = None
-
+	## Singleton constructor
+	#  @param cls - reference to Log class
+	#  @param kwargs - key word arguments
 	def __new__(cls, **kwargs):
 		if not cls.__inst:
 			cls.__inst = super(Log,cls).__new__(cls)
+			inst = cls.__inst
+			
+			## Default values for keyword arguments
+			inst.__level = "DEBUG"
+			inst.__fileName = "pnm.log"
+			inst.__maxBytes = 1024 * 512 # 512kB
+			inst.__backups = 0
+			inst.__fileFormat = "(%(asctime)s) %(filename)s:%(lineno)d [%(levelname)s] %(message)s"
+			inst.__streamFormat = "%(filename)s:%(lineno)d [%(levelname)s] %(message)s"
+					
+			## Process arguments...
+			for k in kwargs:
+				if k == "level":
+					inst.__level = kwargs[k]
+				elif k == "file":
+					inst.__fileName = kwargs[k]
+				elif k == "maxBytes":
+					inst.__maxBytes = kwargs[k]
+				elif k == "backups":
+					inst.__backups = kwargs[k]
+				elif k == "fileFormat":
+					inst.__fileFormat = kwargs[k]
+				elif k == "streamFormat":
+					inst.__streamFormat = kwargs[k]
+					
+			## Setup python logger
+			inst.__setup()
+			
+		## If keywords were passed after creating the singleton warn the user
 		elif kwargs:
 			cls.__inst.logger.warning("Application arguments not used after creation")
 		return cls.__inst
 
-	def __init__(self, **kwargs):
-		level = "debug"
+	## Create the python logger class
+	def __setup(self):
+		print "Creating logger with level \"%s\"" % self.__level
 		
-		fMaxBytes = 1024 * 512 # 512kB
-		fBackups = 0
-
-		fFormat = "(%(asctime)s) %(name)s [%(levelno)s]: %(message)s"
-		sFormat = "[%(levelno)s] %(filename)s:%(lineno)d - %(message)s"
-
-		## Process arguments..
-		for k in kwargs:
-			if k == "file":
-				self.__fName = kwargs[k]
-			elif k == "maxBytes":
-				fMaxBytes = kwargs[k]
-			elif k == "backups":
-				fBackups = kwargs[k]
-			elif k == "fileFormat":
-				fFormat = kwargs[k]
-			elif k == "streamFormat":
-				sFormat = kwargs[k]
-
 		self.logger = logging.getLogger("__main_logger__")
-		self.logger.setLevel(logging.DEBUG)
+		self.logger.setLevel(logging.__dict__[self.__level])
 
 		self.__fHandler = logging.handlers.RotatingFileHandler(
-				os.path.join(os.getcwd(), self.__fName), 
-				maxBytes = fMaxBytes, backupCount = fBackups)
-		self.__fHandler.setFormatter(logging.Formatter(fFormat))
+				os.path.join(os.getcwd(), self.__fileName), 
+				maxBytes = self.__maxBytes, backupCount = self.__backups)
+		self.__fHandler.setFormatter(logging.Formatter(self.__fileFormat))
 		self.logger.addHandler(self.__fHandler)
 
 		self.__sHandler = logging.StreamHandler()
-		self.__sHandler.setFormatter(logging.Formatter(sFormat))
+		self.__sHandler.setFormatter(logging.Formatter(self.__streamFormat))
 		self.logger.addHandler(self.__sHandler)
 
-		self.logger.debug("Logger created (and working)")
+		self.logger.info("Logger created (and working)")
 
 	def __getattr__(self,name):
 		return getattr(self.logger, name)
-
+		
+	# Doxygen info for variables
+	
+	## @var logger
+	#  @brief Python logger
+	#
+	
+	## @var __fHandler
+	#  @brief log-to-file handler
+	#
+	
+	## @var __sHandler
+	#  @brief log-to-stream handler
