@@ -1,4 +1,4 @@
-## @file __init__.py
+## @file pnm/events/__init__.py
 #  @brief Event manager init file.
 
 

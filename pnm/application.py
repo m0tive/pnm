@@ -1,6 +1,6 @@
 
 from logger import Log
-from events import eventManager
+from events import EventManager
 
 ## Singleton application class
 #
@@ -9,7 +9,7 @@ from events import eventManager
 #  Accessed: 9th March 2010
 class Application (object):
 	__inst = None
-
+	
 	def __new__(cls, **kwargs):
 		if not cls.__inst:
 			cls.__inst = super(Application,cls).__new__(cls)
@@ -22,6 +22,11 @@ class Application (object):
 		
 	def __setup(self):
 		## run setup...
+		
+		self.eventManager = EventManager()
+		self.eventManager.hook("ping")
+		self.eventManager.hook("ping")
+		#self.eventManager.indexEvents()
 	
 		Log().info("Application setup")
 		

@@ -1,4 +1,4 @@
-## @file __init__.py
+## @file pnm/__init__.py
 #  @brief Main package init file.
 #  Contains all other packages and start up function.
 
