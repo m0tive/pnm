@@ -2,13 +2,13 @@
 from singletonApp import SingletonApp
 from logger import Log
 
-from renderer.renderManager import RenderManager
 
 ## Application class
 class Application (SingletonApp):
 	def _setup(self):
 		super(Application,self)._setup()
 		
+		from renderer.renderManager import RenderManager
 		self.renderManager = RenderManager()
 		
 		Log().debug("Application setup")
@@ -16,8 +16,10 @@ class Application (SingletonApp):
 		
 	def start(self):
 		self.eventManager.hook("application_start")
+		self.renderManager.start(restoreConfig=True)
 		
 	def close(self):
+		self.renderManager.close()
 		del self.renderManager
 		Log().info("Application closed")
 		

@@ -49,7 +49,11 @@ class Log (object):
 		elif kwargs:
 			cls.__inst.logger.warning("Application arguments not used after creation")
 		return cls.__inst
-
+		
+	## Destructor
+	def __del__(self):
+		print "Log deleted"
+		
 	## Create the python logger class
 	def __setup(self):
 		print "Creating logger with level \"%s\"" % self.__level

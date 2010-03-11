@@ -16,6 +16,10 @@ class EventManager (object):
 		self.__delays = []
 		self.scriptDir = "scripts"
 		
+	## Destructor
+	def __del__(self):
+		Log().info("EventManager deleted")
+		
   ## Hook an event, if one exists.
   #  This fires and event if it exists in the _scripts folder.
   #  @param event - Event name.
