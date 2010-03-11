@@ -46,7 +46,7 @@ class RenderManager (object):
 		return self.__quit
 		
 		
-	def start(self,pluginConfig=None,resourcesConfig="resources.cfg",restoreConfig=False):
+	def setup(self,pluginConfig=None,resourcesConfig="resources.cfg",restoreConfig=False):
 		if self.__setup:
 			raise Exception("RenderManager.setup(...) run twice")
 		self.__setup = True
@@ -65,9 +65,12 @@ class RenderManager (object):
 		
 		self.__frameListener = FrameListener(self)
 		self.ogreRoot.addFrameListener(self.__frameListener)
-		self.ogreRoot.startRendering()
 		
 		return True
+	
+	
+	def start(self):
+		self.ogreRoot.startRendering()
 		
 		
 	def _addResourcesLocations(self,resourcesConfig):
@@ -125,4 +128,4 @@ class FrameListener (ogre.FrameListener):
 		if self.__rm.quit():
 			Log().debug("FrameListener detected a quitter")
 			return False
-		return True #App().eventManager.hook("render_frameStarted",evt)
+		return App().eventManager.hook("render_frameStarted",evt)
