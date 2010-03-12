@@ -31,6 +31,7 @@ class Application (SingletonApp):
 		
 		self.renderManager.close()
 		del self.renderManager
+		
 		Log().info("Application closed")
 		
 		## close the parent application

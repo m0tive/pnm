@@ -5,7 +5,7 @@ import pnm
 #  @param data - information passed
 #  @return True if the event is successful
 def e (eman, data):
-	#pnm.Application().eventManager.update(data.timeSinceLastFrame)
-	#pnm.Application().inputManager.update(data.timeSinceLastFrame)
+	pnm.Application().eventManager.update(data.timeSinceLastFrame)
+	pnm.Application().inputManager.update(data.timeSinceLastFrame)
 
 	return True
