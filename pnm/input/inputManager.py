@@ -20,6 +20,7 @@ class InputManager (object):
 		Log().info("InputManager deleted")
 		
 	def close(self):
+		del self.__inputListener
 		Log().info("InputManager closed")
 		
 	## Setup input systems
@@ -53,7 +54,7 @@ class InputManager (object):
 		self.__keyb = self.system.createInputObjectKeyboard(OIS.OISKeyboard, True)
 		self.__mous = self.system.createInputObjectMouse(OIS.OISMouse, True)
 		
-		self.__inputListener = InputListener()
+		self.__inputListener = InputListener(self.__keyb,self.__mous)
 		self.__keyb.setEventCallback(self.__inputListener)
 		self.__mous.setEventCallback(self.__inputListener)
 		
@@ -62,6 +63,7 @@ class InputManager (object):
 	def update(self,timeElapsed):
 		self.__keyb.capture()
 		self.__mous.capture()
+		self.__inputListener.update(timeElapsed)
 		
 
 
@@ -75,12 +77,17 @@ import ogre.renderer.OGRE as ogre
 import re
 
 class InputListener (OIS.KeyListener, OIS.MouseListener):
-	def __init__(self, keyboardConfig="keyboard.cfg"):
+	def __init__(self, keyboard, mouse, keyboardConfig="keyboard.cfg"):
 		OIS.KeyListener.__init__(self)
 		OIS.MouseListener.__init__(self)
 		
+		self.__keyb = keyboard
+		self.__mous = mouse
+		
 		self.__keyMaps = {}
 		self.__activeMaps = []
+		
+		self.__downMap = {}
 		
 		self.__setupKeyboard(keyboardConfig)
 		
@@ -164,25 +171,62 @@ class InputListener (OIS.KeyListener, OIS.MouseListener):
 					self.__activeMaps.append("Global")
 				
 		Log().debug("Loaded maps: " + str(self.__keyMaps))
+		
+	def update(self,timeElapsed):
+		delList = []
+		for key in self.__downMap:
+			self.__downMap[key] -= timeElapsed
+			if self.__downMap[key] <= 0:
+				self.__keyReleasedActual(key)
+				delList.append(key)
+				
+		for i in delList:
+			del self.__downMap[i]
+		
+	def isKeyDown(self,key):
+		return ((key in self.__downMap) and (self.__downMap[key] > 0)) \
+				or self.__keyb.isKeyDown(key)
 	
 	def keyPressed(self,evt):
-		#App().eventManager.hook("input_keyPressed")
-		#Log().debug("Key pressed: '%s' '%c'" % (evt.key, evt.text))
+		App().eventManager.hook("input_keyPressed")
+		self.__proccessKey(evt.key,0)
 		
-		for name in self.__activeMaps:
-			for keySet in self.__keyMaps[name][0]:
-				#hit = True
-				for k in keySet[0]:
-					Log().debug("~ " + str(k))
-					if OIS.__dict__[k] == evt.key:
-						Log().debug("hit! " + str(evt.key))
-						return
 		
 	def keyReleased(self,evt):
+		if (evt.key in self.__downMap) and (self.__downMap[evt.key] > 0):
+			self.__keyHold(evt.key)
+		self.__downMap[evt.key] = 0.05
+		
+		
+	def __keyHold(self,key):
+		App().eventManager.hook("input_keyHold")
+		self.__proccessKey(key,2)
+		
+		
+	def __keyReleasedActual(self,key):
 		App().eventManager.hook("input_keyReleased")
-		Log().debug("Key released: '%s' '%c'" % (evt.key, evt.text))		
-		if evt.key == OIS.KC_ESCAPE:
-			App().renderManager.quit(True)
+		self.__proccessKey(key,1)
+			
+			
+	def __proccessKey(self,key,itype):
+		for name in self.__activeMaps:
+			for keySet in self.__keyMaps[name][itype]:
+				#hit = True
+				for k in keySet[0]:
+					#Log().debug("~ " + str(k))
+					if OIS.__dict__[k] == key:
+						hit = True
+						for sib in keySet[0]:
+							#Log().debug("# " + sib)
+							if (sib != k) and not self.isKeyDown(OIS.__dict__[sib]):
+								#Log().debug("& " + sib)
+								hit = False
+								break
+						if hit:
+							Log().debug("Hit t%d %s" % (itype,keySet))
+							App().eventManager.hook(keySet[1])
+							break
+		
 		
 	def mouseMoved(self,evt):
 		App().eventManager.hook("input_mouseMoved")
