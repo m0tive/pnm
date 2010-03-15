@@ -76,19 +76,35 @@ class InputManager (object):
 import ogre.renderer.OGRE as ogre
 import re
 
+## Input event listener
+#  
 class InputListener (OIS.KeyListener, OIS.MouseListener):
+	## Constructor
+	#  @param keyboard - reference to the OIS keyboard input object
+	#  @param mouse - reference to the OIS mouse input object
+	#  @param keyboardConfig - file name of keyboard input map config file
 	def __init__(self, keyboard, mouse, keyboardConfig="keyboard.cfg"):
 		OIS.KeyListener.__init__(self)
 		OIS.MouseListener.__init__(self)
 		
-		self.__keyb = keyboard
-		self.__mous = mouse
+		## Time since last update
+		self.__timeElapsed = 0
 		
+		## Reference to the OIS keyboard input object
+		self._keyboard = keyboard
+		## Reference to the OIS mouse input object
+		self._mouse = mouse
+		
+		## Keyboard input maps
 		self.__keyMaps = {}
+		## Currently active keyboard maps' names
 		self.__activeMaps = []
 		
+		## Keys currently pressed.
+		#  The reference key for the keyboard key is the OIS key code (ie. OIS.KC_P)
 		self.__downMap = {}
 		
+		## Load the keyboard maps
 		self.__setupKeyboard(keyboardConfig)
 		
 		Log().debug("InputListener created")
@@ -96,32 +112,53 @@ class InputListener (OIS.KeyListener, OIS.MouseListener):
 	def __setupKeyboard(self,keyboardConfig):
 		Log().debug("Loading keyboard map")
 		
+		# Keyboard maps are stored using the ogre config file, with a slight extention
+		# ---------------------- start example
+		# [Global]
+		# r-LSHIFT+ESCAPE=exit
+		# p-SPACE=jumpLeft
+		# h-CONTROL+Z=run
+		# ---------------------- end
+		# The line 1 declares the map name. Each of the following lines declares a 
+		# new key combo input untill the next map name. Each combo has three parts: 
+		# [type]-[key]=[event]
+		#
+		# type; p - pressed, h - hold, r - released
+		# key; keys, using the OIS names (minus "KC_"), joined with "+". In the case
+		#   of CONTROL and SHIFT, the combo is replaced with two seperate combos 
+		#   with both left and right keys in.
+		# event; the event name passed to pnm.events.eventManager.EventManager.hook
+		#
+		# Note: Each combo can only contain one of each keys.
+		
 		config = ogre.ConfigFile()
-		config.load(keyboardConfig)
+		config.load(keyboardConfig) # load the maps
 		
 		sectionIterator = config.getSectionIterator()
-		keySplit = re.compile('\+')
-		typeSplit = re.compile('-')
+		typeSplit = re.compile('-') # to split type from keys
+		keySplit = re.compile('\+') # to split combined keys
 		while sectionIterator.hasMoreElements():
 			name = sectionIterator.peekNextKey()
 			section = sectionIterator.getNext()
-			if name == '':
+			if name == '': # if the keymap has no name, skip
 				continue
 			Log().debug("Config group \'%s\'" % name)
 			kMap = {'p':[], 'r':[], 'h':[]}
 			for item in section:
 				Log().debug("Config item key=\'%s\' value=\'%s\'" % (item.key, item.value))
 				errorStr = "Repeated keys in keymap \'%s\': \'%s\'" % (name, item.key)
-				eventType = typeSplit.split(item.key)
+				
+				eventType = typeSplit.split(item.key) # get the event type
 				Log().debug("Processing type=\'%s\'" % eventType)
-				keys = keySplit.split(eventType[1])
+				keys = keySplit.split(eventType[1]) # split the keys up
 				eventType = eventType[0]
+				
 				Log().debug("Processing type=%s keys=\'%s\'" % (eventType, keys))
 				shift = None
 				ctrl = None
 				## fix shifts and controls
 				for i in range(len(keys)):
-					if keys[i] == "SHIFT":
+					if keys[i] == "SHIFT": # replace SHIFT
 						shift = i
 						if "LSHIFT" in keys:
 							if "RSHIFT" in keys:
@@ -130,7 +167,7 @@ class InputListener (OIS.KeyListener, OIS.MouseListener):
 								keys[i] = "RSHIFT"
 						else:
 							keys[i] = "LSHIFT"
-					if keys[i] == "CONTROL":
+					if keys[i] == "CONTROL": # replace CONTROL
 						ctrl = i
 						if "LCONTROL" in keys:
 							if "RCONTROL" in keys:
@@ -140,15 +177,15 @@ class InputListener (OIS.KeyListener, OIS.MouseListener):
 						else:
 							keys[i] = "LCONTROL"
 				
+				## add matching RSHIFT and/or RCONTROL if needed.
 				if shift != None and "RSHIFT" in keys:
-					Log().debug("Adding second shift")
 					keys[shift] = "RSHIFT"
 					kMap[eventType].append([keys,item.value])
 				if ctrl != None and "RCONTROL" not in keys:
-					Log().debug("Adding second ctrl")
 					keys[ctrl] = "RCONTROL"
 					kMap[eventType].append([keys,item.value])
 				
+				# check for repeating keys, and preppend "KC_" for OIS
 				for i in range(len(keys)):
 					if keys.count(keys[i]) != 1:
 						raise Exception (errorStr)
@@ -173,38 +210,61 @@ class InputListener (OIS.KeyListener, OIS.MouseListener):
 		Log().debug("Loaded maps: " + str(self.__keyMaps))
 		
 	def update(self,timeElapsed):
+		self.timeElapsed = timeElapsed
+		
 		delList = []
 		for key in self.__downMap:
 			self.__downMap[key] -= timeElapsed
 			if self.__downMap[key] <= 0:
 				self.__keyReleasedActual(key)
 				delList.append(key)
+			#else:
+			#	self.__keyHold(key)
 				
 		for i in delList:
 			del self.__downMap[i]
+			
+			
+		for name in self.__activeMaps:
+			Log().debug("~ " + str(self.__downMap))
+			for keySet in self.__keyMaps[name][2]:
+				#hit = True
+				for k in keySet[0]:
+					#Log().debug("~ " + str(k))
+					if self.isKeyDown(OIS.__dict__[k]):
+						hit = True
+						#for sib in keySet[0]:
+						#	#Log().debug("# " + sib)
+						#	if (sib != k) and not self.isKeyDown(OIS.__dict__[sib]):
+						#		#Log().debug("& " + sib)
+						#		hit = False
+						#		break
+						if hit:
+							#Log().debug("Hit t%d %s" % (2,keySet))
+							App().eventManager.hook(keySet[1],self)
+							#break
+							
 		
 	def isKeyDown(self,key):
 		return ((key in self.__downMap) and (self.__downMap[key] > 0)) \
-				or self.__keyb.isKeyDown(key)
+				or self._keyboard.isKeyDown(key)
 	
 	def keyPressed(self,evt):
-		App().eventManager.hook("input_keyPressed")
+		App().eventManager.hook("input_keyPressed",self)
 		self.__proccessKey(evt.key,0)
 		
 		
 	def keyReleased(self,evt):
-		if (evt.key in self.__downMap) and (self.__downMap[evt.key] > 0):
-			self.__keyHold(evt.key)
 		self.__downMap[evt.key] = 0.05
 		
 		
 	def __keyHold(self,key):
-		App().eventManager.hook("input_keyHold")
+		App().eventManager.hook("input_keyHold",self)
 		self.__proccessKey(key,2)
 		
 		
 	def __keyReleasedActual(self,key):
-		App().eventManager.hook("input_keyReleased")
+		App().eventManager.hook("input_keyReleased",self)
 		self.__proccessKey(key,1)
 			
 			
@@ -224,15 +284,15 @@ class InputListener (OIS.KeyListener, OIS.MouseListener):
 								break
 						if hit:
 							Log().debug("Hit t%d %s" % (itype,keySet))
-							App().eventManager.hook(keySet[1])
+							App().eventManager.hook(keySet[1],self)
 							break
 		
 		
 	def mouseMoved(self,evt):
-		App().eventManager.hook("input_mouseMoved")
+		App().eventManager.hook("input_mouseMoved",self)
 		
 	def mousePressed(self,evt,button):
-		App().eventManager.hook("input_mousePressed")
+		App().eventManager.hook("input_mousePressed",self)
 		
 	def mouseReleased(self,evt,button):
-		App().eventManager.hook("input_mouseReleased")
+		App().eventManager.hook("input_mouseReleased",self)

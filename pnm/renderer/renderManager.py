@@ -5,7 +5,7 @@ import os, os.path
 import ogre.renderer.OGRE as ogre
 from ..logger import Log
 from ..application import Application as App
-
+from camera import Camera
 
 ## Render manager.
 class RenderManager (object):
@@ -19,6 +19,11 @@ class RenderManager (object):
 		self.window = None
 		self.__windowEventListener = None
 		self.__frameListener = None
+		
+		self.sceneManager = None
+		self.__camera = None
+		
+		self.__viewport = None
 		
 		
 	def __del__(self):
@@ -45,6 +50,9 @@ class RenderManager (object):
 			Log().info("RenderManager quitting")
 		return self.__quit
 		
+	def getCamera (self):
+		return self.__camera
+		
 		
 	def setup(self,pluginConfig=None,resourcesConfig="resources.cfg",restoreConfig=False):
 		if self.__setup:
@@ -65,6 +73,27 @@ class RenderManager (object):
 		
 		self.__frameListener = FrameListener(self)
 		self.ogreRoot.addFrameListener(self.__frameListener)
+		
+		self.sceneManager = self.ogreRoot.createSceneManager(ogre.ST_GENERIC,"SceneManager")
+		self.sceneRoot = self.sceneManager.getRootSceneNode()
+		
+		self.__camera = Camera(self.sceneManager)
+		camNode = self.__camera.getNode()
+		camNode.translate(0,0,200)
+		
+		self.__viewport = self.window.addViewport(self.__camera.getCamera())
+		self.__viewport.BackgroundColour = ogre.ColourValue(0,0,0)
+		
+		## build scene...
+		
+		self.sceneManager.ambientLight = ogre.ColourValue(0.1,0.1,0.1)
+		
+		meshManager = ogre.MeshManager.getSingleton()
+		meshManager.createPlane('testPlane','General',
+					ogre.Plane(ogre.Vector3().UNIT_Z, ogre.Vector3().ZERO),100,100,2,2)
+		
+		testNode = self.sceneRoot.createChildSceneNode("Test")
+		testNode.attachObject(self.sceneManager.createEntity('testEntity', 'testPlane'))
 		
 		return True
 	
@@ -101,7 +130,6 @@ class RenderManager (object):
 		
 	def loadAllResources(self):
 		ogre.ResourceGroupManager.getSingleton().initialiseAllResourceGroups()
-		
 		
 		
 class WindowEventListener (ogre.WindowEventListener):
