@@ -5,6 +5,6 @@ import pnm
 #  @param data - information passed
 #  @return True if the event is successful
 def e (eman, data):
-	pnm.Application().renderManager.quit(True)
-
-	return True
+  pnm.Application().renderManager.quit(True)
+  
+  return True

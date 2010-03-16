@@ -5,7 +5,7 @@ import pnm
 #  @param data - information passed
 #  @return True if the event is successful
 def e (eman, data):
-	# event script...
-	pnm.Application().renderManager.getCamera().track(y=-data.timeElapsed)
-	
-	return True
+  # event script...
+  pnm.Application().renderManager.getCamera().track(y=-data.timeElapsed)
+  
+  return True
