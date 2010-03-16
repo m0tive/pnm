@@ -78,15 +78,17 @@ class RenderManager (object):
 		self.sceneRoot = self.sceneManager.getRootSceneNode()
 		
 		self.__camera = Camera(self.sceneManager)
-		camNode = self.__camera.getNode()
-		camNode.translate(0,0,200)
+		#camNode = self.__camera.getNode()
+		#camNode.translate(0,0,200)
+		self.__camera.translate(z=200)
+		
 		
 		self.__viewport = self.window.addViewport(self.__camera.getCamera())
 		self.__viewport.BackgroundColour = ogre.ColourValue(0,0,0)
 		
 		## build scene...
 		
-		self.sceneManager.ambientLight = ogre.ColourValue(0.1,0.1,0.1)
+		self.sceneManager.ambientLight = ogre.ColourValue(0.5,0.5,0.5)
 		
 		meshManager = ogre.MeshManager.getSingleton()
 		meshManager.createPlane('testPlane','General',
@@ -101,6 +103,12 @@ class RenderManager (object):
 	def start(self):
 		self.ogreRoot.startRendering()
 		
+		
+	def update(self,timeElapsed):
+		self.__timeElapsed = timeElapsed
+		
+	def getTimeElapsed(self):
+		return self.__timeElapsed
 		
 	def _addResourcesLocations(self,resourcesConfig):
 		config = ogre.ConfigFile()
@@ -143,6 +151,9 @@ class WindowEventListener (ogre.WindowEventListener):
 	def windowClosed (self, rw):
 		App().eventManager.hook("render_windowQuit",rw)
 		
+	def windowResized (self, rw):
+		pass
+		
 		
 class FrameListener (ogre.FrameListener):
 	def __init__ (self,rm):
@@ -156,4 +167,5 @@ class FrameListener (ogre.FrameListener):
 		if self.__rm.quit():
 			Log().debug("FrameListener detected a quitter")
 			return False
+		self.__rm.update(evt.timeSinceLastFrame)
 		return App().eventManager.hook("render_frameStarted",evt)

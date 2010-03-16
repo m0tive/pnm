@@ -22,6 +22,8 @@ class Application (SingletonApp):
 		self.renderManager.setup(restoreConfig=True)
 		self.inputManager.setup()
 		
+		self.eventManager.hook("application_setup")
+		
 		self.renderManager.start()
 		
 	def close(self):

@@ -78,9 +78,9 @@ class InputManager ():
 				("w32_keyboard", "DISCL_NONEXCLUSIVE"),
 				("x11_keyboard_grab", "false"),
 				("w32_mouse","DISCL_FOREGROUND"),
-				("w32_mouse", "DISCL_NONEXCLUSIVE"),
-				("x11_mouse_grab", "false"),
-				("x11_mouse_hide", "false")]
+				("w32_mouse", "DISCL_EXCLUSIVE"),
+				("x11_mouse_grab", "true"),
+				("x11_mouse_hide", "true")]
 		self.system = OIS.createPythonInputSystem( params )
 		self.__keyb = self.system.createInputObjectKeyboard(OIS.OISKeyboard, False)
 		self.__mous = self.system.createInputObjectMouse(OIS.OISMouse, True)
@@ -222,12 +222,12 @@ class InputManager ():
 				for k in keySet[0]: # get in individual keys
 					if k == key: # and check if they are the same as 'key'
 						good = True
-						Log().debug("got 1: t%d %s" % (itype,k))
+						#Log().debug("got 1: t%d %s" % (itype,k))
 						for sib in keySet[0]: # now check the rest of the keys in the set
 							if (sib != k) and not self.__keyDownMap[sib]:
 								good = False
 								break # stop checking
 						if good: # if all the set are down
-							Log().debug("Hit t%d %s" % (itype,keySet))
+							#Log().debug("Hit t%d %s" % (itype,keySet))
 							App().eventManager.hook(keySet[1],self)
 							#break # I think we should carry on looking...
