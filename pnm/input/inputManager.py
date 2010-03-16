@@ -3,8 +3,28 @@ import ogre.io.OIS as OIS
 from ..logger import Log
 from ..application import Application as App
 
+import ogre.renderer.OGRE as ogre
+import re
+
 ## Keyboard, Mouse and Joystick input manager
-class InputManager (object):
+class InputManager ():
+	
+	
+	class __MouseListener(OIS.MouseListener):
+		def __init__(self, mouse):
+			OIS.MouseListener.__init__(self)
+			self._mouse = mouse
+			
+		def mouseMoved(self,evt):
+			App().eventManager.hook("input_mouseMoved",self)
+			
+		def mousePressed(self,evt,button):
+			App().eventManager.hook("input_mousePressed",self)
+			
+		def mouseReleased(self,evt,button):
+			App().eventManager.hook("input_mouseReleased",self)
+	
+	
 	## Constructor
 	def __init__(self):
 		self.__setup = False
@@ -14,14 +34,25 @@ class InputManager (object):
 		self.__mous = False
 		self.__joys = False
 		
-		self.__inputListener = None
+		self.__mouseListener = None
+		
+		## Keyboard input maps
+		self.__keyMaps = {}
+		## Currently active keyboard maps' names
+		self.__activeMaps = []
+		## Currently pressed keys
+		self.__keyDownMap = [False] * 256
+		
+		self.timeElapsed = 0
 		
 	def __del__(self):
 		Log().info("InputManager deleted")
 		
+		
 	def close(self):
-		del self.__inputListener
+		del self.__mouseListener
 		Log().info("InputManager closed")
+		
 		
 	## Setup input systems
 	#  Only run once
@@ -51,65 +82,17 @@ class InputManager (object):
 				("x11_mouse_grab", "false"),
 				("x11_mouse_hide", "false")]
 		self.system = OIS.createPythonInputSystem( params )
-		self.__keyb = self.system.createInputObjectKeyboard(OIS.OISKeyboard, True)
+		self.__keyb = self.system.createInputObjectKeyboard(OIS.OISKeyboard, False)
 		self.__mous = self.system.createInputObjectMouse(OIS.OISMouse, True)
 		
-		self.__inputListener = InputListener(self.__keyb,self.__mous)
-		self.__keyb.setEventCallback(self.__inputListener)
-		self.__mous.setEventCallback(self.__inputListener)
+		self.__mouseListener = self.__MouseListener(self.__mous)
+		self.__mous.setEventCallback(self.__mouseListener)
 		
-	## Process inputs
-	#  @param timeElapsed - Time since last update
-	def update(self,timeElapsed):
-		self.__keyb.capture()
-		self.__mous.capture()
-		self.__inputListener.update(timeElapsed)
+		self.__setupKeyboard()
+		#Log().debug("%s" % (self.__keyDownMap))
 		
-
-
-
-
-
-
-
-
-import ogre.renderer.OGRE as ogre
-import re
-
-## Input event listener
-#  
-class InputListener (OIS.KeyListener, OIS.MouseListener):
-	## Constructor
-	#  @param keyboard - reference to the OIS keyboard input object
-	#  @param mouse - reference to the OIS mouse input object
-	#  @param keyboardConfig - file name of keyboard input map config file
-	def __init__(self, keyboard, mouse, keyboardConfig="keyboard.cfg"):
-		OIS.KeyListener.__init__(self)
-		OIS.MouseListener.__init__(self)
 		
-		## Time since last update
-		self.__timeElapsed = 0
-		
-		## Reference to the OIS keyboard input object
-		self._keyboard = keyboard
-		## Reference to the OIS mouse input object
-		self._mouse = mouse
-		
-		## Keyboard input maps
-		self.__keyMaps = {}
-		## Currently active keyboard maps' names
-		self.__activeMaps = []
-		
-		## Keys currently pressed.
-		#  The reference key for the keyboard key is the OIS key code (ie. OIS.KC_P)
-		self.__downMap = {}
-		
-		## Load the keyboard maps
-		self.__setupKeyboard(keyboardConfig)
-		
-		Log().debug("InputListener created")
-		
-	def __setupKeyboard(self,keyboardConfig):
+	def __setupKeyboard(self,keyboardConfig="keyboard.cfg"):
 		Log().debug("Loading keyboard map")
 		
 		# Keyboard maps are stored using the ogre config file, with a slight extention
@@ -157,6 +140,7 @@ class InputListener (OIS.KeyListener, OIS.MouseListener):
 				shift = None
 				ctrl = None
 				## fix shifts and controls
+				## @todo fix bug in control and shift replacement
 				for i in range(len(keys)):
 					if keys[i] == "SHIFT": # replace SHIFT
 						shift = i
@@ -189,7 +173,7 @@ class InputListener (OIS.KeyListener, OIS.MouseListener):
 				for i in range(len(keys)):
 					if keys.count(keys[i]) != 1:
 						raise Exception (errorStr)
-					keys[i] = "KC_" + keys[i]
+					keys[i] = OIS.__dict__["KC_" + keys[i]]
 				
 				Log().debug("Split key: " + str(keys))
 				kMap[eventType].append([keys,item.value])
@@ -209,90 +193,41 @@ class InputListener (OIS.KeyListener, OIS.MouseListener):
 				
 		Log().debug("Loaded maps: " + str(self.__keyMaps))
 		
+		
+	## Process inputs
+	#  @param timeElapsed - Time since last update
 	def update(self,timeElapsed):
 		self.timeElapsed = timeElapsed
 		
-		delList = []
-		for key in self.__downMap:
-			self.__downMap[key] -= timeElapsed
-			if self.__downMap[key] <= 0:
-				self.__keyReleasedActual(key)
-				delList.append(key)
-			#else:
-			#	self.__keyHold(key)
-				
-		for i in delList:
-			del self.__downMap[i]
-			
-			
-		for name in self.__activeMaps:
-			Log().debug("~ " + str(self.__downMap))
-			for keySet in self.__keyMaps[name][2]:
-				#hit = True
-				for k in keySet[0]:
-					#Log().debug("~ " + str(k))
-					if self.isKeyDown(OIS.__dict__[k]):
-						hit = True
-						#for sib in keySet[0]:
-						#	#Log().debug("# " + sib)
-						#	if (sib != k) and not self.isKeyDown(OIS.__dict__[sib]):
-						#		#Log().debug("& " + sib)
-						#		hit = False
-						#		break
-						if hit:
-							#Log().debug("Hit t%d %s" % (2,keySet))
-							App().eventManager.hook(keySet[1],self)
-							#break
-							
+		self.__keyb.capture()
+		self.__mous.capture()
 		
-	def isKeyDown(self,key):
-		return ((key in self.__downMap) and (self.__downMap[key] > 0)) \
-				or self._keyboard.isKeyDown(key)
-	
-	def keyPressed(self,evt):
-		App().eventManager.hook("input_keyPressed",self)
-		self.__proccessKey(evt.key,0)
+		for i in range(len(self.__keyDownMap)):
+			if self.__keyb.isKeyDown(OIS.KeyCode(i)):
+				if not self.__keyDownMap[i]:
+					self.__keyDownMap[i] = True
+					self.__checkKey(i,0)
+					App().eventManager.hook("input_keyPressed",i)
+				self.__checkKey(i,2)
+				App().eventManager.hook("input_keyHold",i)
+			elif self.__keyDownMap[i]:
+				self.__keyDownMap[i] = False
+				self.__checkKey(i,1)
+				App().eventManager.hook("input_keyReleased",i)
 		
 		
-	def keyReleased(self,evt):
-		self.__downMap[evt.key] = 0.05
-		
-		
-	def __keyHold(self,key):
-		App().eventManager.hook("input_keyHold",self)
-		self.__proccessKey(key,2)
-		
-		
-	def __keyReleasedActual(self,key):
-		App().eventManager.hook("input_keyReleased",self)
-		self.__proccessKey(key,1)
-			
-			
-	def __proccessKey(self,key,itype):
-		for name in self.__activeMaps:
-			for keySet in self.__keyMaps[name][itype]:
-				#hit = True
-				for k in keySet[0]:
-					#Log().debug("~ " + str(k))
-					if OIS.__dict__[k] == key:
-						hit = True
-						for sib in keySet[0]:
-							#Log().debug("# " + sib)
-							if (sib != k) and not self.isKeyDown(OIS.__dict__[sib]):
-								#Log().debug("& " + sib)
-								hit = False
-								break
-						if hit:
+	def __checkKey(self,key,itype):
+		for name in self.__activeMaps: ## for current maps
+			for keySet in self.__keyMaps[name][itype]: # look through each key set
+				for k in keySet[0]: # get in individual keys
+					if k == key: # and check if they are the same as 'key'
+						good = True
+						Log().debug("got 1: t%d %s" % (itype,k))
+						for sib in keySet[0]: # now check the rest of the keys in the set
+							if (sib != k) and not self.__keyDownMap[sib]:
+								good = False
+								break # stop checking
+						if good: # if all the set are down
 							Log().debug("Hit t%d %s" % (itype,keySet))
 							App().eventManager.hook(keySet[1],self)
-							break
-		
-		
-	def mouseMoved(self,evt):
-		App().eventManager.hook("input_mouseMoved",self)
-		
-	def mousePressed(self,evt,button):
-		App().eventManager.hook("input_mousePressed",self)
-		
-	def mouseReleased(self,evt,button):
-		App().eventManager.hook("input_mouseReleased",self)
+							#break # I think we should carry on looking...
