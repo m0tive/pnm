@@ -25,6 +25,8 @@ class RenderManager (object):
     
     self.__viewport = None
     
+    self.__axisCount = 0
+    
     
   def __del__(self):
     Log().info("RenderManager deleted")
@@ -75,27 +77,53 @@ class RenderManager (object):
     self.ogreRoot.addFrameListener(self.__frameListener)
     
     self.sceneManager = self.ogreRoot.createSceneManager(ogre.ST_GENERIC,"SceneManager")
+    #self.sceneManager.setDisplaySceneNodes(True)
     self.sceneRoot = self.sceneManager.getRootSceneNode()
     
     self.__camera = Camera(self.sceneManager)
     #camNode = self.__camera.getNode()
     #camNode.translate(0,0,200)
-    self.__camera.translate(z=200)
+    self.__camera.translate(0,100,200)
     
     
     self.__viewport = self.window.addViewport(self.__camera.getCamera())
     self.__viewport.BackgroundColour = ogre.ColourValue(0,0,0)
     
+    ogre.TextureManager.getSingleton().setDefaultNumMipmaps (5)
+    
+    #ogre.ResourceGroupManager.getSingleton().initialiseResourceGroup("OgreCore")
+    #ogre.ResourceGroupManager.getSingleton().initialiseResourceGroup("General")
+    ogre.ResourceGroupManager.getSingleton().initialiseAllResourceGroups()
+    
     ## build scene...
     
-    self.sceneManager.ambientLight = ogre.ColourValue(0.5,0.5,0.5)
+    self.sceneManager.ambientLight = ogre.ColourValue(.1,.1,.1)
+    
+    lightNode = self.sceneRoot.createChildSceneNode("MainLightNode")
+    light = self.sceneManager.createLight("MainLight")
+    light.setType(ogre.Light.LT_DIRECTIONAL)
+    light.setDiffuseColour (1,1,1)
+    lightNode.attachObject(light)
+    
+    lightNode.setPosition (0,100,0)
+    lightNode.pitch(ogre.Math.DegreesToRadians(45))
+    
+    
+    self.attachAxis(lightNode)
     
     meshManager = ogre.MeshManager.getSingleton()
     meshManager.createPlane('testPlane','General',
-          ogre.Plane(ogre.Vector3().UNIT_Z, ogre.Vector3().ZERO),100,100,2,2)
+          ogre.Plane(ogre.Vector3().UNIT_Y, ogre.Vector3().ZERO),5000,5000,50,50,upVector=ogre.Vector3().UNIT_Z)
     
+    testEnt = self.sceneManager.createEntity('testEntity', 'testPlane')
     testNode = self.sceneRoot.createChildSceneNode("Test")
-    testNode.attachObject(self.sceneManager.createEntity('testEntity', 'testPlane'))
+    testNode.attachObject(testEnt)
+    testEnt.setMaterialName("pnm/Wireframe")
+    
+    testEnt = self.sceneManager.createEntity('Cube', 'Cube.mesh')
+    cubeNode = self.sceneRoot.createChildSceneNode("CubeNode")
+    cubeNode.attachObject(testEnt)
+    cubeNode.scale(10,10,10)
     
     return True
   
@@ -136,8 +164,11 @@ class RenderManager (object):
     App().eventManager.hook("render_windowCreated",self)
     
     
-  def loadAllResources(self):
-    ogre.ResourceGroupManager.getSingleton().initialiseAllResourceGroups()
+  def attachAxis(self,node):
+    entity = self.sceneManager.createEntity('__Axis_' + str(self.__axisCount), 'axes.mesh')
+    node.attachObject(entity)
+    self.__axisCount += 1
+    return entity
     
     
 class WindowEventListener (ogre.WindowEventListener):
