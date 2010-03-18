@@ -16,3 +16,5 @@ ignore
 *.BASE
 ignore
 *.mesh.xml
+*.bak
+media/models/*.material

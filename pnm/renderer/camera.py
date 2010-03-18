@@ -18,6 +18,7 @@ class Camera (object):
       parent = sceneManager.getRootSceneNode()
     
     self.__camera = sceneManager.createCamera(name)
+    self.__camera.setNearClipDistance(0.1)
     self.__node = parent.createChildSceneNode(name + "Node")
     self.__rotNode = self.__node.createChildSceneNode(name + "RotNode")
     #self.__inner = node.createChildSceneNode(name + "InnerNode")

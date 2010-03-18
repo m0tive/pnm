@@ -99,17 +99,31 @@ class RenderManager (object):
     
     self.sceneManager.ambientLight = ogre.ColourValue(.1,.1,.1)
     
-    lightNode = self.sceneRoot.createChildSceneNode("MainLightNode")
+    lightMain = self.sceneRoot.createChildSceneNode("MainLightNode")
     light = self.sceneManager.createLight("MainLight")
     light.setType(ogre.Light.LT_DIRECTIONAL)
     light.setDiffuseColour (1,1,1)
-    lightNode.attachObject(light)
+    lightMain.attachObject(light)
     
-    lightNode.setPosition (0,100,0)
-    lightNode.pitch(ogre.Math.DegreesToRadians(45))
+    lightMain.setPosition (10,100,0)
+    lightMain.yaw(ogre.Math.DegreesToRadians(30))
+    lightMain.pitch(ogre.Math.DegreesToRadians(45))
     
+    self.attachAxis(lightMain)
     
-    self.attachAxis(lightNode)
+    lightFill = self.sceneRoot.createChildSceneNode("FillLightNode")
+    light = self.sceneManager.createLight("FillLight")
+    light.setType(ogre.Light.LT_DIRECTIONAL)
+    light.setDiffuseColour (.1,.1,.15)
+    lightFill.attachObject(light)
+    
+    lightFill.setPosition (-10,100,0)
+    lightFill.yaw(ogre.Math.DegreesToRadians(60))
+    lightFill.yaw(ogre.Math.DegreesToRadians(180))
+    lightFill.pitch(ogre.Math.DegreesToRadians(-30))
+    
+    self.attachAxis(lightFill)
+    
     
     meshManager = ogre.MeshManager.getSingleton()
     meshManager.createPlane('testPlane','General',
@@ -120,10 +134,11 @@ class RenderManager (object):
     testNode.attachObject(testEnt)
     testEnt.setMaterialName("pnm/Wireframe")
     
-    testEnt = self.sceneManager.createEntity('Cube', 'Cube.mesh')
+    testEnt = self.sceneManager.createEntity('Cube', 'agent.mesh')
     cubeNode = self.sceneRoot.createChildSceneNode("CubeNode")
     cubeNode.attachObject(testEnt)
-    cubeNode.scale(10,10,10)
+    cubeNode.scale(100,100,100)
+    #cubeNode.translate(0,5,0)
     
     return True
   
