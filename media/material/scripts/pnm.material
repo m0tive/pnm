@@ -6,11 +6,56 @@ material pnm/Wireframe
     {
       //lighting off
       //shading flat
-      //ambient 0 0 0
-      //diffuse 1 1 1 0.5
+      ambient 1 1 1
+      diffuse 1 1 1 0.5
       polygon_mode wireframe
       polygon_mode_overrideable false
       cull_hardware none
+      depth_func less
+      //depth_bias -0.1
+
+      scene_blend alpha_blend
+    }
+  }
+}
+
+material pnm/NavMesh
+{
+  technique
+  {
+    pass // wireframe
+    {
+      lighting off
+      polygon_mode wireframe
+      polygon_mode_overrideable false
+      cull_hardware none
+      diffuse 1 1 1 0.5
+    }
+
+    pass
+    {
+      polygon_mode points
+      polygon_mode_overrideable false
+      //lighting off
+      point_size 3
+      point_size_attenuation on 0 5 0
+      diffuse 1 0 0
+      cull_hardware none
+    }
+
+    pass
+    {
+      depth_func less
+      diffuse 0.5 0.5 0.5
+      //cull_hardware none
+    }
+    
+    pass
+    {
+      depth_func less
+      cull_hardware anticlockwise
+      diffuse 0.5 0.5 0.5 0.8
+      scene_blend alpha_blend
     }
   }
 }

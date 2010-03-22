@@ -18,3 +18,9 @@ ignore
 *.mesh.xml
 *.bak
 media/models/*.material
+workspace.mel
+media/*.py
+media/models/*.py
+media/models/*.ma
+*.nfs
+*.nfs*

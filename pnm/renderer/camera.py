@@ -8,7 +8,7 @@ class Camera (object):
   TS_PARENT = ogre.Node().TransformSpace().TS_PARENT
   TS_WORLD = ogre.Node().TransformSpace().TS_WORLD
   
-  def __init__(self, sceneManager, parent=None, name="Camera", trackSpeed=100):
+  def __init__(self, sceneManager, parent=None, name="Camera", trackSpeed=150):
     self.__camera = None
     self.__node = None
     

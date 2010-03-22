@@ -127,14 +127,14 @@ class RenderManager (object):
     
     meshManager = ogre.MeshManager.getSingleton()
     meshManager.createPlane('testPlane','General',
-          ogre.Plane(ogre.Vector3().UNIT_Y, ogre.Vector3().ZERO),5000,5000,50,50,upVector=ogre.Vector3().UNIT_Z)
+          ogre.Plane(ogre.Vector3().UNIT_Y, ogre.Vector3().ZERO),5000,5000,10,10,upVector=ogre.Vector3().UNIT_Z)
     
     testEnt = self.sceneManager.createEntity('testEntity', 'testPlane')
     testNode = self.sceneRoot.createChildSceneNode("Test")
     testNode.attachObject(testEnt)
     testEnt.setMaterialName("pnm/Wireframe")
     
-    testEnt = self.sceneManager.createEntity('Cube', 'agent.mesh')
+    testEnt = self.sceneManager.createEntity('Cube', 'navMesh.mesh')
     cubeNode = self.sceneRoot.createChildSceneNode("CubeNode")
     cubeNode.attachObject(testEnt)
     cubeNode.scale(100,100,100)
