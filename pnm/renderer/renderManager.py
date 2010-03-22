@@ -140,6 +140,12 @@ class RenderManager (object):
     cubeNode.scale(100,100,100)
     #cubeNode.translate(0,5,0)
     
+    navMesh = testEnt.getMesh()
+    nM_edgeList = navMesh.getEdgeList()
+    nM_triangles = nM_edgeList.triangles
+    
+    Log().debug(dir(nM_triangles[0]))
+    
     return True
   
   
