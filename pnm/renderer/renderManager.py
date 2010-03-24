@@ -5,7 +5,9 @@ import os, os.path
 import ogre.renderer.OGRE as ogre
 from ..logger import Log
 from ..application import Application as App
+from ..pathfinding.navigationMesh import NavigationMesh
 from camera import Camera
+from ..pathfinding.buildFixedNavMesh import buildFixedNavMesh
 
 ## Render manager.
 class RenderManager (object):
@@ -140,11 +142,16 @@ class RenderManager (object):
     cubeNode.scale(100,100,100)
     #cubeNode.translate(0,5,0)
     
-    navMesh = testEnt.getMesh()
+    """navMesh = testEnt.getMesh()
     nM_edgeList = navMesh.getEdgeList()
     nM_triangles = nM_edgeList.triangles
     
-    Log().debug(dir(nM_triangles[0]))
+    Log().debug(len(nM_triangles))"""
+    
+    #navMesh = NavigationMesh("navMesh.mesh")
+    
+    navMesh = NavigationMesh()
+    buildFixedNavMesh(navMesh)
     
     return True
   

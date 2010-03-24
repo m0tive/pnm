@@ -7,7 +7,7 @@ import ogre.renderer.OGRE as ogre
 import re
 
 ## Keyboard, Mouse and Joystick input manager
-class InputManager ():
+class InputManager (object):
   
   
   class __MouseListener(OIS.MouseListener):
