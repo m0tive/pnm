@@ -14,19 +14,26 @@ class Application (SingletonApp):
     from .input.inputManager import InputManager
     self.inputManager = InputManager()
     
+    from .pathfinding.agentManager import AgentManager
+    self.agentManager = AgentManager()
+    
     Log().debug("Application setup")
     self.eventManager.hook("application_setup")
     
   def start(self):
-    self.eventManager.hook("application_start")
+    self.eventManager.hook("application_preStart")
     self.renderManager.setup(restoreConfig=True)
     self.inputManager.setup()
     
-    self.eventManager.hook("application_setup")
     
+    self.eventManager.hook("application_start")
     self.renderManager.start()
     
+    
   def close(self):
+    
+    self.agentManager.close()
+    del self.agentManager
     
     self.inputManager.close()
     del self.inputManager

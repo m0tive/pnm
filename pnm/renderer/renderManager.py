@@ -24,6 +24,8 @@ class RenderManager (object):
     
     self.sceneManager = None
     self.__camera = None
+    self.rootNode = None
+    self.sceneNode = None
     
     self.__viewport = None
     
@@ -80,7 +82,7 @@ class RenderManager (object):
     
     self.sceneManager = self.ogreRoot.createSceneManager(ogre.ST_GENERIC,"SceneManager")
     #self.sceneManager.setDisplaySceneNodes(True)
-    self.sceneRoot = self.sceneManager.getRootSceneNode()
+    self.rootNode = self.sceneManager.getRootSceneNode()
     
     self.__camera = Camera(self.sceneManager)
     #camNode = self.__camera.getNode()
@@ -89,7 +91,7 @@ class RenderManager (object):
     
     
     self.__viewport = self.window.addViewport(self.__camera.getOgreCamera())
-    self.__viewport.BackgroundColour = ogre.ColourValue(0,0,0)
+    self.__viewport.BackgroundColour = ogre.ColourValue(0.9,0.9,0.9)
     
     ogre.TextureManager.getSingleton().setDefaultNumMipmaps (5)
     
@@ -101,7 +103,7 @@ class RenderManager (object):
     
     self.sceneManager.ambientLight = ogre.ColourValue(.1,.1,.1)
     
-    lightMain = self.sceneRoot.createChildSceneNode("MainLightNode")
+    lightMain = self.rootNode.createChildSceneNode("MainLightNode")
     light = self.sceneManager.createLight("MainLight")
     light.setType(ogre.Light.LT_DIRECTIONAL)
     light.setDiffuseColour (1,1,1)
@@ -113,7 +115,7 @@ class RenderManager (object):
     
     self.attachAxis(lightMain)
     
-    lightFill = self.sceneRoot.createChildSceneNode("FillLightNode")
+    lightFill = self.rootNode.createChildSceneNode("FillLightNode")
     light = self.sceneManager.createLight("FillLight")
     light.setType(ogre.Light.LT_DIRECTIONAL)
     light.setDiffuseColour (.1,.1,.15)
@@ -129,15 +131,19 @@ class RenderManager (object):
     
     meshManager = ogre.MeshManager.getSingleton()
     meshManager.createPlane('gridPlane','General',
-          ogre.Plane(ogre.Vector3().UNIT_Y, ogre.Vector3().ZERO),5000,5000,10,10,upVector=ogre.Vector3().UNIT_Z)
+          ogre.Plane(ogre.Vector3().UNIT_Y, ogre.Vector3().ZERO),
+          5000,5000,10,10,upVector=ogre.Vector3().UNIT_Z)
     
     gridEntity = self.sceneManager.createEntity('gridEntity', 'gridPlane')
-    gridNode = self.sceneRoot.createChildSceneNode("gridNode")
+    gridNode = self.rootNode.createChildSceneNode("gridNode")
     gridNode.attachObject(gridEntity)
     gridEntity.setMaterialName("pnm/Wireframe")
     
+    self.sceneNode = self.rootNode.createChildSceneNode("sceneNode")
+    self.sceneNode.scale(100,100,100)
+    
     #testEnt = self.sceneManager.createEntity('Cube', 'navMesh.mesh')
-    #cubeNode = self.sceneRoot.createChildSceneNode("CubeNode")
+    #cubeNode = self.rootNode.createChildSceneNode("CubeNode")
     #cubeNode.attachObject(testEnt)
     #cubeNode.scale(100,100,100)
     #cubeNode.translate(0,5,0)
@@ -157,7 +163,13 @@ class RenderManager (object):
     #navMesh.close()
     
     return True
-  
+    
+  def displayMesh(self,name):
+    entity = self.sceneManager.createEntity(name + "Entity", name + ".mesh")
+    node = self.sceneNode.createChildSceneNode(name + "sceneNode")
+    node.attachObject(entity)
+    
+    return entity, node
   
   def start(self):
     App().eventManager.hook("input_resetView")
