@@ -85,10 +85,10 @@ class RenderManager (object):
     self.__camera = Camera(self.sceneManager)
     #camNode = self.__camera.getNode()
     #camNode.translate(0,0,200)
-    self.__camera.translate(0,100,200)
+    #self.__camera.translate(0,100,200)
     
     
-    self.__viewport = self.window.addViewport(self.__camera.getCamera())
+    self.__viewport = self.window.addViewport(self.__camera.getOgreCamera())
     self.__viewport.BackgroundColour = ogre.ColourValue(0,0,0)
     
     ogre.TextureManager.getSingleton().setDefaultNumMipmaps (5)
@@ -128,18 +128,18 @@ class RenderManager (object):
     
     
     meshManager = ogre.MeshManager.getSingleton()
-    meshManager.createPlane('testPlane','General',
+    meshManager.createPlane('gridPlane','General',
           ogre.Plane(ogre.Vector3().UNIT_Y, ogre.Vector3().ZERO),5000,5000,10,10,upVector=ogre.Vector3().UNIT_Z)
     
-    testEnt = self.sceneManager.createEntity('testEntity', 'testPlane')
-    testNode = self.sceneRoot.createChildSceneNode("Test")
-    testNode.attachObject(testEnt)
-    testEnt.setMaterialName("pnm/Wireframe")
+    gridEntity = self.sceneManager.createEntity('gridEntity', 'gridPlane')
+    gridNode = self.sceneRoot.createChildSceneNode("gridNode")
+    gridNode.attachObject(gridEntity)
+    gridEntity.setMaterialName("pnm/Wireframe")
     
-    testEnt = self.sceneManager.createEntity('Cube', 'navMesh.mesh')
-    cubeNode = self.sceneRoot.createChildSceneNode("CubeNode")
-    cubeNode.attachObject(testEnt)
-    cubeNode.scale(100,100,100)
+    #testEnt = self.sceneManager.createEntity('Cube', 'navMesh.mesh')
+    #cubeNode = self.sceneRoot.createChildSceneNode("CubeNode")
+    #cubeNode.attachObject(testEnt)
+    #cubeNode.scale(100,100,100)
     #cubeNode.translate(0,5,0)
     
     """navMesh = testEnt.getMesh()
@@ -150,13 +150,17 @@ class RenderManager (object):
     
     #navMesh = NavigationMesh("navMesh.mesh")
     
-    navMesh = NavigationMesh()
-    buildFixedNavMesh(navMesh)
+    #navMesh = NavigationMesh()
+    #buildFixedNavMesh(navMesh)
+    #navMesh.buildLinks()
+    
+    #navMesh.close()
     
     return True
   
   
   def start(self):
+    App().eventManager.hook("input_resetView")
     self.ogreRoot.startRendering()
     
     

@@ -1,4 +1,4 @@
-from ..logger import Log
+#from ..logger import Log
 
 def buildFixedNavMesh(nm):
   nm._NavigationMesh__newNode(-3.040802, 1.712190, 6.106594)

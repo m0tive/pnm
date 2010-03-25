@@ -52,7 +52,13 @@ class Camera (object):
   def pitch(self,angle,ts=TS_LOCAL):
     self.__rotNode.pitch(angle,ts)
     
+  def resetOrientation(self):
+    self.__rotNode.resetOrientation()
+    self.__node.resetOrientation()
     
-  def getCamera(self):
+  def resetPosition(self):
+    self.__node.setPosition(0,0,0)
+    
+  def getOgreCamera(self):
     return self.__camera
     
