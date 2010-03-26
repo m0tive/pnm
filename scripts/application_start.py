@@ -27,4 +27,6 @@ def e (eman, data):
   agent.getNode().setPosition(firstNode.getPosition())
   Log().debug(agent.getNode().getPosition())
   
+  Log().debug(navMesh.getTriangle(1).getNormal())
+  
   return True

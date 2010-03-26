@@ -160,6 +160,12 @@ class NavigationMesh (object):
         v3._Node__addNeighbours([v1])
         
       
+    def getNormal(self):
+      p1 = self.__nodes[0]._Node__position
+      p2 = self.__nodes[1]._Node__position
+      p3 = self.__nodes[2]._Node__position
+      return ((p2 - p1).crossProduct(p3 - p1)).normalisedCopy()
+      
       
     def __str__(self):
       return "Triangle[%d, %d, %d]" % (self.__nodes[0].getId(), 
@@ -233,6 +239,9 @@ class NavigationMesh (object):
     
   def getNodes(self):
     return list(self.__nodes)
+    
+  def getTriangle(self, tid):
+    return self.__triangles[tid]
     
   def getTriangles(self):
     return list(self.__triangles)

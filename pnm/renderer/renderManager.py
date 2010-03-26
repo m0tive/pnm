@@ -162,6 +162,10 @@ class RenderManager (object):
     
     #navMesh.close()
     
+    
+    from pnm.math import Math
+    #Log().debug(Math.distanceToLine(ogre.Vector3(0,0,0), ogre.Vector3(0,,1), ogre.Vector3(0,1,-1)))
+    
     return True
     
   def displayMesh(self,name,parent=None):
