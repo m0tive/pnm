@@ -7,5 +7,6 @@ import pnm
 def e (eman, data):
   pnm.Application().eventManager.update(data.timeSinceLastFrame)
   pnm.Application().inputManager.update(data.timeSinceLastFrame)
+  pnm.Application().agentManager.update(data.timeSinceLastFrame)
   
   return True

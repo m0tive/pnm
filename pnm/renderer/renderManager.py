@@ -91,7 +91,7 @@ class RenderManager (object):
     
     
     self.__viewport = self.window.addViewport(self.__camera.getOgreCamera())
-    self.__viewport.BackgroundColour = ogre.ColourValue(0.9,0.9,0.9)
+    self.__viewport.BackgroundColour = ogre.ColourValue(0.1,0.1,0.1)
     
     ogre.TextureManager.getSingleton().setDefaultNumMipmaps (5)
     
@@ -164,9 +164,11 @@ class RenderManager (object):
     
     return True
     
-  def displayMesh(self,name):
+  def displayMesh(self,name,parent=None):
+    if parent == None:
+      parent = self.sceneNode
     entity = self.sceneManager.createEntity(name + "Entity", name + ".mesh")
-    node = self.sceneNode.createChildSceneNode(name + "sceneNode")
+    node = parent.createChildSceneNode(name + "Node")
     node.attachObject(entity)
     
     return entity, node

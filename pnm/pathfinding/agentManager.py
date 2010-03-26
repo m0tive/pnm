@@ -12,14 +12,21 @@ class AgentManager (object):
   class __Agent (object):
     def __init__(self, node):
       self.__node = node
+      self.__rotation = 0
+      self.__velocity = 1
+      self.__triangle = None
       
     def getNode(self):
       return self.__node
+      
+    def update(self, timeElapsed):
+      self.__node.translate(0,0,self.__velocity * timeElapsed)
     
   ##----------------------------------------------------------------------------
   
   def __init__(self):
     self.__agents = []
+    self.__navigationMesh = None
     
   def __del__(self):
     Log().info(self.__class__.__name__ + " deleted")
@@ -27,7 +34,7 @@ class AgentManager (object):
   def close(self):
     Log().info(self.__class__.__name__ + " closed")
     
-  def newAgent (self, node, mesh):
+  def newAgent (self, node):
     for a in self.__agents:
       if a.getNode() == node:
         return a
@@ -38,3 +45,12 @@ class AgentManager (object):
     
   def getAgents (self):
     return list(self.__agents)
+    
+  def setNavigationMesh (self, navMesh):
+    if len(navMesh.getTriangles()) == 0:
+      raise Exception ("NavigationMesh is empty")
+    self.__navigationMesh = navMesh
+    
+  def update(self,timeElapsed):
+    for ag in self.__agents:
+      ag.update(timeElapsed)

@@ -1,6 +1,7 @@
 
 from ..logger import Log
 from ..application import Application as App
+from ..math import Math
 
 import ogre.renderer.OGRE as ogre
 
@@ -53,6 +54,10 @@ class NavigationMesh (object):
           #Log().debug("node %d adding neighbour %d" % (self.__id, n._Node__id))
           self.__neighbours.append(n)
           n._Node__neighbours.append(self)
+      
+    def __str__ (self):
+      return "Node[%f, %f, %f]" % \
+        (self.__position.x, self.__position.y, self.__position.z)
   
   ##----------------------------------------------------------------------------
   
@@ -63,7 +68,7 @@ class NavigationMesh (object):
       v2._Node__triangles.append(self)
       v3._Node__triangles.append(self)
       
-      self.__vertices = [v1,v2,v3]
+      self.__nodes = [v1,v2,v3]
       
       self.__neighbours = []
       Log().debug("building %s" % self)
@@ -73,7 +78,7 @@ class NavigationMesh (object):
       
     def close(self):
       del self.__neighbours
-      del self.__vertices
+      del self.__nodes
       del self.__mesh
       
       #Log().debug(self.__class__.__name__ + " closed")
@@ -99,12 +104,12 @@ class NavigationMesh (object):
       return list(self.__neighbours)
       
     def getVertices (self):
-      return list(self.__vertices)
+      return list(self.__nodes)
       
     def buildLinks(self):
-      v1 = self.__vertices[0]
-      v2 = self.__vertices[1]
-      v3 = self.__vertices[2]
+      v1 = self.__nodes[0]
+      v2 = self.__nodes[1]
+      v3 = self.__nodes[2]
       
       v1tris = len(v1.getTriangles())
       v2tris = len(v2.getTriangles())
@@ -157,14 +162,14 @@ class NavigationMesh (object):
       
       
     def __str__(self):
-      return "Triangle[%d, %d, %d]" % (self.__vertices[0].getId(), 
-          self.__vertices[1].getId(), self.__vertices[2].getId())
+      return "Triangle[%d, %d, %d]" % (self.__nodes[0].getId(), 
+          self.__nodes[1].getId(), self.__nodes[2].getId())
   
   ##----------------------------------------------------------------------------
   
   def __init__(self):
     self.__ogreMesh = None
-    self.__vertices = []
+    self.__nodes = []
     self.__triangles = []
 
     #self.loadMesh(meshName)
@@ -175,19 +180,19 @@ class NavigationMesh (object):
   def close(self):
     for t in self.__triangles:
       t.close()
-    for n in self.__vertices:
+    for n in self.__nodes:
       n.close()
     
     Log().info(self.__class__.__name__ + " closed")
     
   def __newNode (self,x,y,z):
-    for vertex in self.__vertices:
+    for vertex in self.__nodes:
       p = vertex._Node__position
       if (abs(p.x-x)<1e-6) and (abs(p.y-y)<1e-6) and (abs(p.z-z)<1e-6):
         return vertex
     # else create a new vertex...
     newNode = self.__Node(ogre.Vector3(x,y,z))
-    self.__vertices.append(newNode)
+    self.__nodes.append(newNode)
     return newNode
     
   def __newTriangle (self,v1,v2,v3):
@@ -196,7 +201,7 @@ class NavigationMesh (object):
     
     for tri in self.__triangles:
       matches = 0
-      for vertex in tri._Triangle__vertices:
+      for vertex in tri._Triangle__nodes:
         if v1 == vertex or v2 == vertex or v3 == vertex:
           matches += 1
       if matches == 3:
@@ -214,14 +219,26 @@ class NavigationMesh (object):
     return newTriangle
     
   def _buildTriangle(self,id1,id2,id3):
-    size = len(self.__vertices)
+    size = len(self.__nodes)
     if id1 > size or id2 > size or id3 > size:
       raise Exception ("vertex id out of range")
-    return self.__newTriangle(self.__vertices[id1-1], self.__vertices[id2-1], self.__vertices[id3-1])
+    return self.__newTriangle(self.__nodes[id1-1], self.__nodes[id2-1], self.__nodes[id3-1])
     
   def buildLinks(self):
     for t in self.__triangles:
       t.buildLinks()
+      
+  def getNode(self, nid):
+    return self.__nodes[nid]
+    
+  def getNodes(self):
+    return list(self.__nodes)
+    
+  def getTriangles(self):
+    return list(self.__triangles)
+    
+  def getNearestTriangle(self,vect):
+    pass
     
   def addTriangle (self,pt1,pt2,pt3):
     vertex1 = self.__newNode(pt1[0],pt1[1],pt1[2])
