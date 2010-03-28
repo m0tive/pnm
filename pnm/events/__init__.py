@@ -1,7 +1,9 @@
 ## @file pnm/events/__init__.py
 #  @brief Package init file
-#-------------------------------------------------------------------------------
 
-# keep me
+## @package pnm.events
+#  @brief Events package.
+
+#-------------------------------------------------------------------------------
 
 from eventManager import *

@@ -1,8 +1,13 @@
 ## @file agentManager.py
-#  @brief Agent and pathfinding manager
+#  @brief Agent and %pathfinding manager.
 #  @author Peter Dodds
 #  @version 1.0
 #  @date 28/03/10
+#  @todo make ncca compliant
+
+## @package pnm.pathfinding.agentManager
+#  @brief Agent and %pathfinding manager.
+
 #-------------------------------------------------------------------------------
 
 from ..logger import Log
@@ -11,10 +16,10 @@ from ..application import Application as App
 
 #import ogre.renderer.OGRE as ogre
 
-## Agent and pathfinding manager
+## Agent and %pathfinding manager
 class AgentManager (object):
   
-  ##----------------------------------------------------------------------------
+  #-----------------------------------------------------------------------------
   
   ## An agent
   class __Agent (object):
@@ -30,8 +35,9 @@ class AgentManager (object):
     def update(self, timeElapsed):
       self.__node.translate(0,0,self.__velocity * timeElapsed)
     
-  ##----------------------------------------------------------------------------
+  #-----------------------------------------------------------------------------
   
+  ## Constructor
   def __init__(self):
     self.__agents = []
     self.__navigationMesh = None

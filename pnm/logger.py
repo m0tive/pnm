@@ -1,14 +1,19 @@
 ## @file logger.py
-#  @brief A utility class to setup and contain the python logger
+#  @brief A utility class to setup and contain the python %logger.
 #  @author Peter Dodds
 #  @version 1.0
 #  @date 28/03/10
+#  @todo make ncca compliant
+
+## @package pnm.logger
+#  @brief A utility class to setup and contain the python %logger.
+
 #-------------------------------------------------------------------------------
 
 import logging, logging.handlers
 import os, os.path
 
-## Singleton logger class
+## A utility class to setup and contain the python %logger.
 #  
 #  Singleton pattern taken from post on Stackoverflow.com by "modi"
 #  http://stackoverflow.com/questions/42558/python-and-the-singleton-pattern/1810367#1810367

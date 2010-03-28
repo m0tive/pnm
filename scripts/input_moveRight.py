@@ -1,3 +1,15 @@
+## @file scripts/input_moveRight.py
+#  @brief Script file, see scripts.input_moveRight
+#  @author Peter Dodds
+#  @version 1.0
+#  @date 28/03/10
+#  @todo make ncca compliant
+
+## @package scripts.input_moveRight
+#  @brief 
+
+#-------------------------------------------------------------------------------
+
 import pnm
 from pnm.logger import Log
 import ogre.renderer.OGRE as ogre

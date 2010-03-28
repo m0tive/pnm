@@ -1,3 +1,15 @@
+## @file scripts/application_start.py
+#  @brief Script file, see scripts.application_start
+#  @author Peter Dodds
+#  @version 1.0
+#  @date 28/03/10
+#  @todo make ncca compliant
+
+## @package scripts.application_start
+#  @brief 
+
+#-------------------------------------------------------------------------------
+
 from pnm.application import Application as App
 from pnm.pathfinding.navigationMesh import NavigationMesh
 from pnm.pathfinding.buildFixedNavMesh import buildFixedNavMesh

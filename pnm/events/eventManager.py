@@ -1,14 +1,19 @@
 ## @file eventManager.py
-#  @brief A dynamic event loader and manager
+#  @brief A dynamic event loader and manager.
 #  @author Peter Dodds
 #  @version 1.1
 #  @date 28/03/10
+#  @todo make ncca compliant
+
+## @package pnm.events.eventManager
+#  @brief A dynamic event loader and manager.
+
 #-------------------------------------------------------------------------------
 
 import re, os, os.path
 from ..logger import Log
 
-## Event scripts manager.
+## A dynamic event loader and manager.
 #  Loads and runs event functions from a python package.
 #  @todo create a generate script function that creates temp scripts (which 
 #  could be wrote to file on request)

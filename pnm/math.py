@@ -1,11 +1,16 @@
 ## @file math.py
-#  @brief Static maths functions contained within a class
+#  @brief Static maths functions contained within a class.
 #  @author Peter Dodds
 #  @version 1.0
 #  @date 28/03/10
+#  @todo make ncca compliant
+
+## @package pnm.math
+#  @brief Static maths functions contained within a class.
+
 #-------------------------------------------------------------------------------
 
-## 
+## Static maths functions contained within a class.
 class Math (object):
   @staticmethod
   def distanceToLine(s,p1,p2):

@@ -1,8 +1,13 @@
 ## @file renderManager.py
-#  @brief OGRE and render manager
+#  @brief OGRE and render manager.
 #  @author Peter Dodds
 #  @version 1.0
 #  @date 28/03/10
+#  @todo make ncca compliant
+
+## @package pnm.events.renderManager
+#  @brief OGRE and render manager.
+
 #-------------------------------------------------------------------------------
 
 
@@ -226,6 +231,7 @@ class RenderManager (object):
     return entity
     
     
+## Window event listener
 class WindowEventListener (ogre.WindowEventListener):
   def __init__ (self,rm):
     super(WindowEventListener,self).__init__()
@@ -241,6 +247,7 @@ class WindowEventListener (ogre.WindowEventListener):
     pass
     
     
+## Frame event listener
 class FrameListener (ogre.FrameListener):
   def __init__ (self,rm):
     super(FrameListener,self).__init__()

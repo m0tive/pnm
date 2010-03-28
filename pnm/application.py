@@ -1,15 +1,20 @@
 ## @file application.py
-#  @brief The application class.
+#  @brief The %application class.
 #  @author Peter Dodds
 #  @version 1.0
 #  @date 28/03/10
+#  @todo make ncca compliant
+
+## @package pnm.application
+#  @brief The %application class.
+
 #-------------------------------------------------------------------------------
+
 
 from singletonApp import SingletonApp
 from logger import Log
 
-
-## Application class
+## The %application class.
 class Application (SingletonApp):
   def _setup(self):
     super(Application,self)._setup()

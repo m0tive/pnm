@@ -1,3 +1,15 @@
+## @file scripts/render_frameStarted.py
+#  @brief Script file, see scripts.render_frameStarted
+#  @author Peter Dodds
+#  @version 1.0
+#  @date 28/03/10
+#  @todo make ncca compliant
+
+## @package scripts.render_frameStarted
+#  @brief 
+
+#-------------------------------------------------------------------------------
+
 import pnm
 
 ## Event function.

@@ -3,6 +3,11 @@
 #  @author Peter Dodds
 #  @version 1.0
 #  @date 28/03/10
+#  @todo make ncca compliant
+
+## @package pnm.pathfinding.buildFixedNavMesh
+#  @brief Pre-defined navigation mesh setup script.
+
 #-------------------------------------------------------------------------------
 
 ## Pre-defined navigation mesh setup script.

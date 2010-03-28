@@ -24,34 +24,55 @@
       <li><a href="functions.html"><span>Class&nbsp;Members</span></a></li>
     </ul>
   </div>
-  <div class="navpath"><a class="el" href="a00047.html">pnm</a>.<a class="el" href="a00059.html">renderer</a>.<a class="el" href="a00060.html">camera</a>.<a class="el" href="a00007.html">Camera</a>
+  <div class="navpath"><a class="el" href="a00047.html">pnm</a>.<a class="el" href="a00061.html">renderer</a>.<a class="el" href="a00062.html">camera</a>.<a class="el" href="a00007.html">Camera</a>
   </div>
 </div>
 <div class="contents">
 <h1>pnm.renderer.camera.Camera Class Reference</h1><!-- doxytag: class="pnm::renderer::camera::Camera" -->
-<p><a href="a00090.html">List of all members.</a></p>
+<p>A camera class to contain and manage the OGRE camera.  
+<a href="#_details">More...</a></p>
+
+<p><a href="a00092.html">List of all members.</a></p>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#a67f7402582ba4c0fda8bbd7742e647a5">__init__</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Constructor Creates a new camera and attaches it to the given parent OGRE SceneNode.  <a href="#a67f7402582ba4c0fda8bbd7742e647a5"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#aecb147f702fbe0a1a62b89eb8ada1e89">__del__</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destructor.  <a href="#aecb147f702fbe0a1a62b89eb8ada1e89"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#afd688a2a00722b7467927494975d7191">track</a></td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Translate relative to the X-Z plane Y rotation (yaw) is taken into account.  <a href="#afd688a2a00722b7467927494975d7191"></a><br/></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Translate relative to the X-Z plane.  <a href="#afd688a2a00722b7467927494975d7191"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#af5f2142fc94cf60ff925080afe3363ea">translate</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#a8bea66fa45b92481da8c68f351c31504">yaw</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#a567da531026483eb8bd3186af004cf4b">pitch</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#ac64443e7e3c5eceb78c7a660a4847e2f">resetOrientation</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Translate the camera's SceneNode.  <a href="#af5f2142fc94cf60ff925080afe3363ea"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#a09d485903704c0c53ab59bb12a397579">resetPosition</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Reset the camera's translation.  <a href="#a09d485903704c0c53ab59bb12a397579"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#a8bea66fa45b92481da8c68f351c31504">yaw</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Apply a relative yaw rotation (ie.  <a href="#a8bea66fa45b92481da8c68f351c31504"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#a567da531026483eb8bd3186af004cf4b">pitch</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Apply a relative pitch rotation (ie.  <a href="#a567da531026483eb8bd3186af004cf4b"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#ac64443e7e3c5eceb78c7a660a4847e2f">resetOrientation</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Reset the camera's rotation.  <a href="#ac64443e7e3c5eceb78c7a660a4847e2f"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#ac6f236b1020d7745275081a7718a7fbc">getOgreCamera</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get a reference to the OGRE camera.  <a href="#ac6f236b1020d7745275081a7718a7fbc"></a><br/></td></tr>
 <tr><td colspan="2"><h2>Static Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">tuple&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#a8579323766785389d3a9c265d2ea384b">TS_LOCAL</a> = ogre.Node()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Local transfromation space flag.  <a href="#a8579323766785389d3a9c265d2ea384b"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">tuple&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#a87bc58d746e695f3393343a8d5354c2a">TS_PARENT</a> = ogre.Node()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parent transfromation space flag.  <a href="#a87bc58d746e695f3393343a8d5354c2a"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">tuple&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#ad7cfd75f219a98374c5084cea1643512">TS_WORLD</a> = ogre.Node()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">World transformation space flag.  <a href="#ad7cfd75f219a98374c5084cea1643512"></a><br/></td></tr>
 <tr><td colspan="2"><h2>Private Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#a21b67cab3f0652a637a85097228299fa">__camera</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The OGRE camera entity.  <a href="#a21b67cab3f0652a637a85097228299fa"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#a9276e086d75483d9510229a6ecab9430">__node</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#ab13f018d2a08735280914b708c1a0842">__trackSpeed</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Outer OGRE SceneNode the camera is attached to.  <a href="#a9276e086d75483d9510229a6ecab9430"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#aff682358627757ecefd56b03b7b35f74">__rotNode</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Inner OGRE SceneNode used for rotation.  <a href="#aff682358627757ecefd56b03b7b35f74"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html#ab13f018d2a08735280914b708c1a0842">__trackSpeed</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The speed multiplier for <a class="el" href="a00007.html#afd688a2a00722b7467927494975d7191" title="Translate relative to the X-Z plane.">Camera.track</a> motion.  <a href="#ab13f018d2a08735280914b708c1a0842"></a><br/></td></tr>
 </table>
+<hr/><a name="_details"></a><h2>Detailed Description</h2>
+<p>A camera class to contain and manage the OGRE camera. </p>
+<p>Using <a class="el" href="a00007.html#afd688a2a00722b7467927494975d7191" title="Translate relative to the X-Z plane.">Camera.track</a>, the camera keeps x and z-axis transformations relative and translations in the y-axis relative in its parent's transformation space. </p>
 <hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="aecb147f702fbe0a1a62b89eb8ada1e89"></a><!-- doxytag: member="pnm::renderer::camera::Camera::__del__" ref="aecb147f702fbe0a1a62b89eb8ada1e89" args="" -->
 <div class="memitem">
@@ -68,6 +89,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Destructor. </p>
 
 </div>
 </div>
@@ -114,6 +137,17 @@
 </div>
 <div class="memdoc">
 
+<p>Constructor Creates a new camera and attaches it to the given parent OGRE SceneNode. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>sceneManager</em>&nbsp;</td><td>- The OGRE scene manager </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>parent</em>&nbsp;</td><td>- Parent OGRE sceneNode to attach the camera to (defaults to the root SceneNode) </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>name</em>&nbsp;</td><td>- The camera's name. (default, "Camera") </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>trackSpeed</em>&nbsp;</td><td>- The speed multiplier for <a class="el" href="a00007.html#afd688a2a00722b7467927494975d7191" title="Translate relative to the X-Z plane.">Camera.track</a> motion. (default, 150) </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a class="anchor" id="ac6f236b1020d7745275081a7718a7fbc"></a><!-- doxytag: member="pnm::renderer::camera::Camera::getOgreCamera" ref="ac6f236b1020d7745275081a7718a7fbc" args="" -->
@@ -131,6 +165,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Get a reference to the OGRE camera. </p>
 
 </div>
 </div>
@@ -165,6 +201,16 @@
 </div>
 <div class="memdoc">
 
+<p>Apply a relative pitch rotation (ie. </p>
+<p>about the x-axis) to the camera </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>angle</em>&nbsp;</td><td>- The angle of rotation in radians </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>ts</em>&nbsp;</td><td>- Transformation space (default, <a class="el" href="a00007.html#a8579323766785389d3a9c265d2ea384b" title="Local transfromation space flag.">Camera.TS_LOCAL</a>) </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a class="anchor" id="ac64443e7e3c5eceb78c7a660a4847e2f"></a><!-- doxytag: member="pnm::renderer::camera::Camera::resetOrientation" ref="ac64443e7e3c5eceb78c7a660a4847e2f" args="" -->
@@ -183,6 +229,8 @@
 </div>
 <div class="memdoc">
 
+<p>Reset the camera's rotation. </p>
+
 </div>
 </div>
 <a class="anchor" id="a09d485903704c0c53ab59bb12a397579"></a><!-- doxytag: member="pnm::renderer::camera::Camera::resetPosition" ref="a09d485903704c0c53ab59bb12a397579" args="" -->
@@ -200,6 +248,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Reset the camera's translation. </p>
 
 </div>
 </div>
@@ -240,7 +290,8 @@
 </div>
 <div class="memdoc">
 
-<p>Translate relative to the X-Z plane Y rotation (yaw) is taken into account. </p>
+<p>Translate relative to the X-Z plane. </p>
+<p>Y rotation (yaw) is taken into account </p>
 
 </div>
 </div>
@@ -287,6 +338,17 @@
 </div>
 <div class="memdoc">
 
+<p>Translate the camera's SceneNode. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>- x-axis translation (default, 0) </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>y</em>&nbsp;</td><td>- y-axis translation (default, 0) </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>z</em>&nbsp;</td><td>- z-axis translation (default, 0) </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>ts</em>&nbsp;</td><td>- Transformation space (default, <a class="el" href="a00007.html#a8579323766785389d3a9c265d2ea384b" title="Local transfromation space flag.">Camera.TS_LOCAL</a>) </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a class="anchor" id="a8bea66fa45b92481da8c68f351c31504"></a><!-- doxytag: member="pnm::renderer::camera::Camera::yaw" ref="a8bea66fa45b92481da8c68f351c31504" args="" -->
@@ -320,6 +382,16 @@
 </div>
 <div class="memdoc">
 
+<p>Apply a relative yaw rotation (ie. </p>
+<p>about the y-axis) to the camera </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>angle</em>&nbsp;</td><td>- The angle of rotation in radians </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>ts</em>&nbsp;</td><td>- Transformation space (default, <a class="el" href="a00007.html#a8579323766785389d3a9c265d2ea384b" title="Local transfromation space flag.">Camera.TS_LOCAL</a>) </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <hr/><h2>Member Data Documentation</h2>
@@ -334,6 +406,8 @@
 </div>
 <div class="memdoc">
 
+<p>The OGRE camera entity. </p>
+
 </div>
 </div>
 <a class="anchor" id="a9276e086d75483d9510229a6ecab9430"></a><!-- doxytag: member="pnm::renderer::camera::Camera::__node" ref="a9276e086d75483d9510229a6ecab9430" args="" -->
@@ -346,6 +420,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Outer OGRE SceneNode the camera is attached to. </p>
 
 </div>
 </div>
@@ -360,6 +436,8 @@
 </div>
 <div class="memdoc">
 
+<p>Inner OGRE SceneNode used for rotation. </p>
+
 </div>
 </div>
 <a class="anchor" id="ab13f018d2a08735280914b708c1a0842"></a><!-- doxytag: member="pnm::renderer::camera::Camera::__trackSpeed" ref="ab13f018d2a08735280914b708c1a0842" args="" -->
@@ -372,6 +450,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>The speed multiplier for <a class="el" href="a00007.html#afd688a2a00722b7467927494975d7191" title="Translate relative to the X-Z plane.">Camera.track</a> motion. </p>
 
 </div>
 </div>
@@ -386,6 +466,8 @@
 </div>
 <div class="memdoc">
 
+<p>Local transfromation space flag. </p>
+
 </div>
 </div>
 <a class="anchor" id="a87bc58d746e695f3393343a8d5354c2a"></a><!-- doxytag: member="pnm::renderer::camera::Camera::TS_PARENT" ref="a87bc58d746e695f3393343a8d5354c2a" args="" -->
@@ -398,6 +480,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Parent transfromation space flag. </p>
 
 </div>
 </div>
@@ -412,13 +496,15 @@
 </div>
 <div class="memdoc">
 
+<p>World transformation space flag. </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="a00027.html">camera.py</a></li>
 </ul>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Sun Mar 28 16:58:06 2010 for PNM by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Sun Mar 28 21:20:03 2010 for PNM by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>

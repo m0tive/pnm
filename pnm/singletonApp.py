@@ -1,16 +1,22 @@
 ## @file singletonApp.py
-#  @brief A generalised, simple, singleton application class containing logging
-#    and events
+#  @brief A generalised, simple, singleton %application class containing logging
+#    and event managment.
 #  @author Peter Dodds
 #  @version 1.0
 #  @date 28/03/10
+#  @todo make ncca compliant
+
+## @package pnm.singletonApp
+#  @brief A generalised, simple, singleton %application class containing logging
+#    and event managment.
+
 #-------------------------------------------------------------------------------
 
 from logger import Log
 from events import EventManager
 
-## Singleton application class
-#
+## A generalised, simple, singleton %application class containing logging
+#    and event managment.
 #  Singleton pattern taken from post on Stackoverflow.com by "modi"
 #  http://stackoverflow.com/questions/42558/python-and-the-singleton-pattern/1810367#1810367
 #  Accessed: 9th March 2010

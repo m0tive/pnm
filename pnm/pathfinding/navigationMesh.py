@@ -1,8 +1,13 @@
 ## @file navigationMesh.py
-#  @brief A navigation mesh used for pathfinding
+#  @brief A navigation mesh used for %pathfinding
 #  @author Peter Dodds
 #  @version 1.0
 #  @date 28/03/10
+#  @todo make ncca compliant
+
+## @package pnm.pathfinding.navigationMesh
+#  @brief A navigation mesh used for %pathfinding
+
 #-------------------------------------------------------------------------------
 
 from ..logger import Log
@@ -11,15 +16,17 @@ from ..math import Math
 
 import ogre.renderer.OGRE as ogre
 
-## 
+## A navigation mesh used for %pathfinding
 class NavigationMesh (object):
  
   #class __Node ():
     #def __init__(self,p1,p2):
       #pass
     
-  ##----------------------------------------------------------------------------
+  #-----------------------------------------------------------------------------
   
+  ## A path node
+  #
   class __Node ():
     __idIt = 1
     
@@ -65,8 +72,9 @@ class NavigationMesh (object):
       return "Node[%f, %f, %f]" % \
         (self.__position.x, self.__position.y, self.__position.z)
   
-  ##----------------------------------------------------------------------------
+  #-----------------------------------------------------------------------------
   
+  ## A collection of three __Node
   class __Triangle ():
     def __init__(self,v1,v2,v3):
       self.__mesh = None
@@ -179,13 +187,13 @@ class NavigationMesh (object):
   
   ##----------------------------------------------------------------------------
   
+  ## Constructor
   def __init__(self):
     self.__ogreMesh = None
     self.__nodes = []
     self.__triangles = []
-
-    #self.loadMesh(meshName)
     
+  ## Destructor
   def __del__(self):
     Log().info(self.__class__.__name__ + " deleted")
     

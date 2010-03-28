@@ -3,6 +3,11 @@
 #  @author Peter Dodds
 #  @version 1.0
 #  @date 28/03/10
+#  @todo make ncca compliant
+
+## @package pnm.input.inputManager
+#  @brief Input manager processing ogre and OIS inputs.
+
 #-------------------------------------------------------------------------------
 
 import ogre.io.OIS as OIS
@@ -12,13 +17,14 @@ from ..application import Application as App
 import ogre.renderer.OGRE as ogre
 import re
 
-## Keyboard, Mouse and Joystick input manager
+## Input manager processing ogre and OIS inputs.
+#  Keyboard and Mouse input are processed
 class InputManager (object):
   
-  
+  ## Mouse event listener derived from the OIS.MouseListener
   class __MouseListener(OIS.MouseListener):
     ## Constructor
-    #  @
+    #  @param _mouse - OIS.Mouse object
     def __init__(self, _mouse):
       OIS.MouseListener.__init__(self)
       self.__mouse = _mouse
@@ -28,7 +34,7 @@ class InputManager (object):
       
     ## Mouse move event.
     #  inherited from OIS.MouseListener
-    #  @param 
+    #  @param evt - Event data
     def mouseMoved(self,evt):
       App().eventManager.hook("input_mouseMoved",self)
       
@@ -42,6 +48,7 @@ class InputManager (object):
     def mouseReleased(self,evt,button):
       App().eventManager.hook("input_mouseReleased",self)
   
+  #-----------------------------------------------------------------------------
   
   ## Constructor
   def __init__(self):
