@@ -1,3 +1,9 @@
+## @file camera.py
+#  @brief A camera class to contain and manage the OGRE camera
+#  @author Peter Dodds
+#  @version 1.0
+#  @date 28/03/10
+#-------------------------------------------------------------------------------
 
 import ogre.renderer.OGRE as ogre
 from ..logger import Log

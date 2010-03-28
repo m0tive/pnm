@@ -1,9 +1,15 @@
+## @file logger.py
+#  @brief A utility class to setup and contain the python logger
+#  @author Peter Dodds
+#  @version 1.0
+#  @date 28/03/10
+#-------------------------------------------------------------------------------
 
 import logging, logging.handlers
 import os, os.path
 
 ## Singleton logger class
-#
+#  
 #  Singleton pattern taken from post on Stackoverflow.com by "modi"
 #  http://stackoverflow.com/questions/42558/python-and-the-singleton-pattern/1810367#1810367
 #  Accessed: 9th March 2010

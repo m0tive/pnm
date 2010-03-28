@@ -1,3 +1,9 @@
+## @file navigationMesh.py
+#  @brief A navigation mesh used for pathfinding
+#  @author Peter Dodds
+#  @version 1.0
+#  @date 28/03/10
+#-------------------------------------------------------------------------------
 
 from ..logger import Log
 from ..application import Application as App

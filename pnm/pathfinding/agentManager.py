@@ -1,3 +1,9 @@
+## @file agentManager.py
+#  @brief Agent and pathfinding manager
+#  @author Peter Dodds
+#  @version 1.0
+#  @date 28/03/10
+#-------------------------------------------------------------------------------
 
 from ..logger import Log
 from ..application import Application as App
@@ -5,10 +11,12 @@ from ..application import Application as App
 
 #import ogre.renderer.OGRE as ogre
 
-## 
+## Agent and pathfinding manager
 class AgentManager (object):
   
   ##----------------------------------------------------------------------------
+  
+  ## An agent
   class __Agent (object):
     def __init__(self, node):
       self.__node = node

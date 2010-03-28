@@ -1,6 +1,7 @@
 ## @file pnm/__init__.py
-#  @brief Main package init file.
+#  @brief Package init file
 #  Contains all other packages and start up function.
+#-------------------------------------------------------------------------------
 
 ## @package pnm
 #  @brief Peter's Navigation Mesh pathfinder.

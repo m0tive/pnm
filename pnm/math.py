@@ -1,4 +1,9 @@
-
+## @file math.py
+#  @brief Static maths functions contained within a class
+#  @author Peter Dodds
+#  @version 1.0
+#  @date 28/03/10
+#-------------------------------------------------------------------------------
 
 ## 
 class Math (object):

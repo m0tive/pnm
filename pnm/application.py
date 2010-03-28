@@ -1,3 +1,9 @@
+## @file application.py
+#  @brief The application class.
+#  @author Peter Dodds
+#  @version 1.0
+#  @date 28/03/10
+#-------------------------------------------------------------------------------
 
 from singletonApp import SingletonApp
 from logger import Log

@@ -1,5 +1,10 @@
-## @file eventManager.py
-#  @brief 
+## @file renderManager.py
+#  @brief OGRE and render manager
+#  @author Peter Dodds
+#  @version 1.0
+#  @date 28/03/10
+#-------------------------------------------------------------------------------
+
 
 import os, os.path
 import ogre.renderer.OGRE as ogre

@@ -1,10 +1,15 @@
 ## @file eventManager.py
-#  @brief 
+#  @brief A dynamic event loader and manager
+#  @author Peter Dodds
+#  @version 1.1
+#  @date 28/03/10
+#-------------------------------------------------------------------------------
 
 import re, os, os.path
 from ..logger import Log
 
 ## Event scripts manager.
+#  Loads and runs event functions from a python package.
 #  @todo create a generate script function that creates temp scripts (which 
 #  could be wrote to file on request)
 class EventManager (object):
@@ -25,6 +30,7 @@ class EventManager (object):
   #  @param event - Event name.
   #  @param data - Information to be sent to the event.
   #  @todo add note about data.
+  #  @return 
   def hook(self, event, data=None):
     if self.__indexed == False:
       self.indexEvents()
@@ -42,12 +48,16 @@ class EventManager (object):
   #  @param delay - Time to wait before hooking the event
   #  @param event - Event name.
   #  @param data - Information to be sent to the event.
+  #  @return True if the event was created
   def hook_delayed(self, delay, event, data=None):
     if event in self.__events:
       self.__delays.append([delay,event,data])
       return True
     return False
     
+  ## Check if an event name is within the loaded event list
+  #  @param event - Event name.
+  #  @return True if the event is loaded
   def hasEvent(self,event):
     return (event in self.__events)
   

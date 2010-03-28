@@ -24,3 +24,4 @@ media/models/*.py
 media/models/*.ma
 *.nfs
 *.nfs*
+*.stackdump

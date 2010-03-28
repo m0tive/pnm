@@ -1,3 +1,9 @@
+## @file inputManager.py
+#  @brief Input manager processing ogre and OIS inputs.
+#  @author Peter Dodds
+#  @version 1.0
+#  @date 28/03/10
+#-------------------------------------------------------------------------------
 
 import ogre.io.OIS as OIS
 from ..logger import Log
@@ -11,16 +17,28 @@ class InputManager (object):
   
   
   class __MouseListener(OIS.MouseListener):
-    def __init__(self, mouse):
+    ## Constructor
+    #  @
+    def __init__(self, _mouse):
       OIS.MouseListener.__init__(self)
-      self._mouse = mouse
+      self.__mouse = _mouse
       
+    def getMouse(self):
+      return self.__mouse
+      
+    ## Mouse move event.
+    #  inherited from OIS.MouseListener
+    #  @param 
     def mouseMoved(self,evt):
       App().eventManager.hook("input_mouseMoved",self)
       
+    ## Mouse move event.
+    #  inherited from OIS.MouseListener
     def mousePressed(self,evt,button):
       App().eventManager.hook("input_mousePressed",self)
       
+    ## Mouse move event.
+    #  inherited from OIS.MouseListener
     def mouseReleased(self,evt,button):
       App().eventManager.hook("input_mouseReleased",self)
   

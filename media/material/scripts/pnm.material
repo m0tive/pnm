@@ -32,16 +32,16 @@ material pnm/NavMesh
       diffuse 1 1 1 0.5
     }
 
-    pass
-    {
-      polygon_mode points
-      polygon_mode_overrideable false
-      //lighting off
-      point_size 3
-      point_size_attenuation on 0 5 0
-      diffuse 1 0 0
-      cull_hardware none
-    }
+    //pass
+    //{
+    //  polygon_mode points
+    //  polygon_mode_overrideable false
+    //  //lighting off
+    //  point_size 3
+    //  point_size_attenuation on 0 5 0
+    //  diffuse 1 0 0
+    //  cull_hardware none
+    //}
 
     pass
     {

@@ -1,3 +1,10 @@
+## @file singletonApp.py
+#  @brief A generalised, simple, singleton application class containing logging
+#    and events
+#  @author Peter Dodds
+#  @version 1.0
+#  @date 28/03/10
+#-------------------------------------------------------------------------------
 
 from logger import Log
 from events import EventManager

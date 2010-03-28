@@ -1,6 +1,6 @@
 ## @file pnm/events/__init__.py
-#  @brief Event manager init file.
-
+#  @brief Package init file
+#-------------------------------------------------------------------------------
 
 # keep me
 

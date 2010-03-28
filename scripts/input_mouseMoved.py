@@ -6,7 +6,7 @@ import pnm.logger
 #  @return True if the event is successful
 def e (eman, data):
   # event script...
-  ms = data._mouse.getMouseState()
+  ms = data.getMouse().getMouseState()
   t = pnm.Application().renderManager.getTimeElapsed()
   #pnm.logger.Log().debug("<%d,%d,%d> %d" % (ms.X.rel, ms.Y.rel, ms.Z.rel, ms.buttons))
   
@@ -14,7 +14,7 @@ def e (eman, data):
     pnm.Application().renderManager.getCamera().yaw(ms.X.rel*0.001)
     pnm.Application().renderManager.getCamera().pitch(ms.Y.rel*0.001)"""
   
-  pnm.Application().renderManager.getCamera().yaw(-ms.X.rel*0.001)
-  pnm.Application().renderManager.getCamera().pitch(-ms.Y.rel*0.001)
+  pnm.Application().renderManager.getCamera().yaw(-ms.X.rel*0.004)
+  pnm.Application().renderManager.getCamera().pitch(-ms.Y.rel*0.004)
   
   return True
