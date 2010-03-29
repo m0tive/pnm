@@ -18,9 +18,6 @@ from ..logger import Log
 from ..application import Application as App
 from camera import Camera
 
-from ..pathfinding.navigationMesh import NavigationMesh
-from ..pathfinding.buildFixedNavMesh import buildFixedNavMesh
-
 
 #-------------------------------------------------------------------------------
 ## OGRE and render manager.
@@ -212,14 +209,6 @@ class RenderManager (object):
     nM_triangles = nM_edgeList.triangles
     
     Log().debug(len(nM_triangles))"""
-    
-    #navMesh = NavigationMesh("navMesh.mesh")
-    
-    #navMesh = NavigationMesh()
-    #buildFixedNavMesh(navMesh)
-    #navMesh.buildLinks()
-    
-    #navMesh.close()
     
     return True
   

@@ -78,6 +78,11 @@ class NavigationMesh (object):
   class __Triangle ():
     def __init__(self,v1,v2,v3):
       self.__mesh = None
+      
+      self._tested = False
+      
+      self.__normal = None
+      
       v1._Node__triangles.append(self)
       v2._Node__triangles.append(self)
       v3._Node__triangles.append(self)
@@ -119,6 +124,9 @@ class NavigationMesh (object):
       
     def getVertices (self):
       return list(self.__nodes)
+      
+    def getVertexPosition(self, _id):
+      return self.__nodes[_id].getPosition()
       
     def buildLinks(self):
       v1 = self.__nodes[0]
@@ -175,10 +183,12 @@ class NavigationMesh (object):
         
       
     def getNormal(self):
-      p1 = self.__nodes[0]._Node__position
-      p2 = self.__nodes[1]._Node__position
-      p3 = self.__nodes[2]._Node__position
-      return ((p2 - p1).crossProduct(p3 - p1)).normalisedCopy()
+      if self.__normal == None:
+        p1 = self.__nodes[0]._Node__position
+        p2 = self.__nodes[1]._Node__position
+        p3 = self.__nodes[2]._Node__position
+        self.__normal = ((p2 - p1).crossProduct(p3 - p1)).normalisedCopy()
+      return self.__normal
       
       
     def __str__(self):
@@ -260,8 +270,51 @@ class NavigationMesh (object):
   def getTriangles(self):
     return list(self.__triangles)
     
-  def getNearestTriangle(self,vect):
-    pass
+  
+  def __resetTraingleTest(self):
+    for tri in self.__triangles:
+      tri._tested = False
+    
+    
+  #-----------------------------------------------------------------------------
+  ## 
+  #  @param _lastTri - The first triangle to test
+  #  @todo Change this to a itterative approche. This will miss close neighbours
+  #    and pick distant vertically aligned triangles (which we don't want)
+  def getPointOnMesh(self, _point, _firstTri=None, _reset=True):
+    if _reset:
+      self.__resetTraingleTest()
+      
+    if not _firstTri:
+      _firstTri = self.__triangles[0]
+    
+    point2d = ogre.Vector2(_point.x, _point.z)
+    tri0 = _firstTri.getVertexPosition(0)
+    tri0 = ogre.Vector2(tri0.x, tri0.z)
+    tri1 = _firstTri.getVertexPosition(1)
+    tri1 = ogre.Vector2(tri1.x, tri1.z)
+    tri2 = _firstTri.getVertexPosition(2)
+    tri2 = ogre.Vector2(tri2.x, tri2.z)
+    
+    # Test triangle
+    output = Math.getPointIn2dTriangle(point2d, tri0, tri1, tri2)
+    if output != None:
+      ## Calculate z coordinate
+      return 0.0, _firstTri
+    # Set tested flag
+    _firstTri._tested = True
+    
+    # Test triangles neighbours (if untested)
+    output = None
+    for tri in _firstTri.getNeighbours():
+      if tri._tested == False:
+        output = self.getPointOnMesh(_point,tri,False)
+        if output != None:
+          return output
+    
+    # Point wasn't on mesh
+    return None
+    
     
   def addTriangle (self,pt1,pt2,pt3):
     vertex1 = self.__newNode(pt1[0],pt1[1],pt1[2])
