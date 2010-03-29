@@ -1,7 +1,7 @@
 ## @file pnm/renderer/__init__.py
 #  @brief Package init file
 
-## @package pnm.events
+## @package pnm.renderer
 #  @brief Rendering package.
 
 #-------------------------------------------------------------------------------

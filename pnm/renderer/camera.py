@@ -1,12 +1,12 @@
 ## @file camera.py
-#  @brief A %camera class to contain and manage the OGRE camera
+#  @brief A %camera class to contain and manage the OGRE %camera
 #  @author Peter Dodds
 #  @version 1.0
 #  @date 28/03/10
 #  @todo make ncca compliant
 
-## @package pnm.events.camera
-#  @brief A camera class to contain and manage the OGRE camera.
+## @package pnm.renderer.camera
+#  @brief A %camera class to contain and manage the OGRE %camera.
 
 #-------------------------------------------------------------------------------
 
