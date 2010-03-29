@@ -36,6 +36,7 @@ class NavigationMesh (object):
       self.__position = pos
       self.__triangles = []
       self.__neighbours = []
+      self.__astar_neighbourCosts = {}
     
     #def __del__(self):
       #Log().info(self.__class__.__name__ + " deleted")
@@ -44,6 +45,7 @@ class NavigationMesh (object):
       del self.__position
       del self.__triangles
       del self.__neighbours
+      del self.__neighbourCosts
       
       #Log().debug(self.__class__.__name__ + " closed")
       
@@ -65,8 +67,14 @@ class NavigationMesh (object):
           if n == None:
             raise Exception ("n == None")
           #Log().debug("node %d adding neighbour %d" % (self.__id, n._Node__id))
+          cost = self.__position.distance(n._Node__position)
+          
+          ## @todo Take into account change in height when saving cost
+          
           self.__neighbours.append(n)
+          self.__neighbourCosts[n] = cost
           n._Node__neighbours.append(self)
+          n._Node__neighbourCosts[self] = cost
       
     def __str__ (self):
       return "Node[%f, %f, %f]" % \
@@ -315,7 +323,93 @@ class NavigationMesh (object):
     # Point wasn't on mesh
     return None
     
+  #-----------------------------------------------------------------------------
+  def findPath(self,_start,_goal):
+    # test start point and goal point are in triangles,
+    '''output = self.getPointOnMesh(_start)
+    if ouput == None:
+      return None
+    _start.y = output[0]
+    output = self.getPointOnMesh(_goal)'''
     
+    # Create start and end node, linking them with all the nodes in their 
+    # respective triangle
+    
+    # Calculate the path using A*
+    path = self.__astar_calculatePath()
+    
+    # Delete start and end node
+    
+    return path
+    
+  #-----------------------------------------------------------------------------
+  ##
+  #  @todo change \c open to a proper priority ranked list (or sort it 
+  #    occationally)
+  def __astar_calculatePath(self, _start, _goal):
+    solved = False
+    
+    _start._Node__astar_cost = 0
+    open = [_start]
+    closed = []
+    
+    while (1):
+      if len(open) == 0:
+        return None
+      
+      current = self.__astar_popLowestRank(open)
+      if current == _goal:
+        break
+      
+      closed.append(current)
+      for neighbour in current.getNeighbours():
+        cost = current._Node__astar_cost + \
+            self.__astar_movementcost(current,neighbour)
+        if (neighbour in open) and (cost < neighbour._Node__astar_cost):
+          # remove neighbour from OPEN, because new path is better
+          open.remove(neighbour)
+        if (neighbour in closed) and (cost < neighbour._Node__astar_cost):
+          #remove neighbour from CLOSED
+          closed.remove(neighbour)
+        if (neighbour not in open) and (neighbour not in closed):
+          neighbour._Node__astar_cost = cost
+          open.append(neighbour)
+          neighbour._Node__astar_rank = neighbour._Node__astar_cost + \
+              self.__astar_heuristic(neighbour,_goal)
+          neighbour._Node__astar_parent = current
+    
+    return self.__astar_reconstructPath(_goal)
+    
+    
+  #-----------------------------------------------------------------------------
+  def __astar_popLowestRank(self,_openList):
+    low = 0
+    if len(_openList) != 1: # we'll just let it crash if an empty list is passed
+      for i in range(1,len(_openList)):
+        if _openList[i]._Node__astar_rank < _openList[low]._Node__astar_rank:
+          low = i
+    return _openList.pop(low)
+    
+    
+  #-----------------------------------------------------------------------------
+  def __astar_heuristic(self, _node, _goal):
+    return _node._Node__position.distance(_goal._Node__position)
+    
+    
+  #-----------------------------------------------------------------------------
+  def __astar_movementcost(self, _nodeA, _nodeB):
+    return _nodeA._Node__astar_neighbourCosts[_nodeB]
+    
+    
+  #-----------------------------------------------------------------------------
+  def __astar_reconstructPath(self, _node, _path=[]):
+    _path.insert(0,_node)
+    if _node._Node__astar_parent == None:
+      return _path
+    return self.__astar_reconstructPath(_node._Node__astar_parent, _path)
+    
+    
+  #-----------------------------------------------------------------------------
   def addTriangle (self,pt1,pt2,pt3):
     vertex1 = self.__newNode(pt1[0],pt1[1],pt1[2])
     vertex2 = self.__newNode(pt2[0],pt2[1],pt2[2])
@@ -323,15 +417,14 @@ class NavigationMesh (object):
     
     return self.__newTriangle(vertex1,vertex2,vertex3)
     
-    #Log().debug(tri)
-    #Log().debug(tri._Triangle__neighbours)
-    #Log().debug(len(self.__triangles))
+    
 
-  """def loadMesh(self,meshName):
+  ''' Failed code to load mesh data from ogre hardware buffers
+  #-----------------------------------------------------------------------------
+  def loadMesh(self,meshName):
     del self.__ogreMesh
     
     
-    '''
     rmIt = ogre.ResourceGroupManager.getSingleton().getResourceManagerIterator()
     resourceManager = rmIt.getNext()
     while resourceManager.__class__.__name__ != "MeshManager":
@@ -365,7 +458,7 @@ class NavigationMesh (object):
     for triangle in edgeList.triangles:
       pass #Log().debug(triangle)
     
-    '''"""
+    '''
     
     
     
