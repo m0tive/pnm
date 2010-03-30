@@ -24,37 +24,58 @@ import re
 #  Keyboard and Mouse input are processed
 class InputManager (object):
   
-  #-| Start Nested Classes |----------------------------------------------------
+  #---------------------------------------------------| Start Nested Classes |--
+  
   #-----------------------------------------------------------------------------
   ## Mouse event listener derived from the OIS.MouseListener
   class __MouseListener(OIS.MouseListener):
+    
+    #---------------------------------------------------------------------------
     ## Constructor
     #  @param _mouse - OIS.Mouse object
     def __init__(self, _mouse):
       OIS.MouseListener.__init__(self)
+      
+      ## The OIS mouse object
       self.__mouse = _mouse
       
+      
+    #---------------------------------------------------------------------------
+    ## Get the OIS mouse object
+    #  @return The OIS mouse object
     def getMouse(self):
       return self.__mouse
       
+     
+    #---------------------------------------------------------------------------
     ## Mouse move event.
     #  inherited from OIS.MouseListener
     #  @param evt - Event data
     def mouseMoved(self,evt):
       App().eventManager.hook("input_mouseMoved",self)
       
-    ## Mouse move event.
+      
+    #---------------------------------------------------------------------------
+    ## Mouse pressed event.
     #  inherited from OIS.MouseListener
+    #  @param evt - Event data
+    #  @param button - Mouse button pressed
     def mousePressed(self,evt,button):
       App().eventManager.hook("input_mousePressed",self)
       
-    ## Mouse move event.
+      
+    #---------------------------------------------------------------------------
+    ## Mouse released event.
     #  inherited from OIS.MouseListener
+    #  @param evt - Event data
+    #  @param button - Mouse button pressed
     def mouseReleased(self,evt,button):
       App().eventManager.hook("input_mouseReleased",self)
       
-  #-| End Nested Classes |------------------------------------------------------
+  #-----------------------------------------------------| End Nested Classes |--
   
+  
+  # InputManager continued...
   
   #-----------------------------------------------------------------------------
   ## Constructor

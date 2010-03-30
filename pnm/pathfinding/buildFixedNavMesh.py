@@ -10,6 +10,8 @@
 
 #-------------------------------------------------------------------------------
 
+
+#-------------------------------------------------------------------------------
 ## Pre-defined navigation mesh setup script.
 #  This setup function saves us from having to process an ogre mesh (which seems
 #  to be impossible in python-ogre...)

@@ -8,12 +8,15 @@
 
 #-------------------------------------------------------------------------------
 
+
 from application import *
 
+
+#-------------------------------------------------------------------------------
 ## Start up function.
 #  Run once to start the %application.
 def run ():
-  Application(foo="Hello World", bar=3.147).start()
+  Application().start()
   
   # ...
   
