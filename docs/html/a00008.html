@@ -51,17 +51,21 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check and index event script files Searches through given script directory for event script files.  <a href="#a6badecb7250686f59609f426eba0c971"></a><br/></td></tr>
 <tr><td colspan="2"><h2>Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#ae0f286275792c98e37a46b5f9dd8a841">scriptDir</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Script directory name.  <a href="#ae0f286275792c98e37a46b5f9dd8a841"></a><br/></td></tr>
 <tr><td colspan="2"><h2>Private Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#a063807e9651d56802752466a46629643">__indexed</a></td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Regular expression for file names.  <a href="#a063807e9651d56802752466a46629643"></a><br/></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Flag set once events have been indexed.  <a href="#a063807e9651d56802752466a46629643"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#a06bd0f175593e4ff4da42fefa77dc540">__events</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Loaded event names.  <a href="#a06bd0f175593e4ff4da42fefa77dc540"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#a00ef6eda07189a497dd6e1e0486ab911">__loadedEvents</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Loaded event <a class="el" href="a00063.html" title="Pnm event scripts package loaded in eventsManager.">scripts</a>.  <a href="#a00ef6eda07189a497dd6e1e0486ab911"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#afc15ea230a41383374dc67793cd0e96c">__delays</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Delayed script hooks.  <a href="#afc15ea230a41383374dc67793cd0e96c"></a><br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>A dynamic event loader and manager. </p>
 <p>Loads and runs event functions from a python package. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>create a generate script function that creates temp <a class="el" href="a00063.html" title="Pnm event scripts package loaded in eventsManager.">scripts</a> (which could be wrote to file on request) </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>create a generate script function that creates temp scripts (which could be wrote to file on request) </dd></dl>
 <hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a0b570972e09f7e1bded2899c7518c32b"></a><!-- doxytag: member="pnm::events::eventManager::EventManager::__del__" ref="a0b570972e09f7e1bded2899c7518c32b" args="" -->
 <div class="memitem">
@@ -180,7 +184,7 @@
   </dd>
 </dl>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo:</a></b></dt><dd>add note about data. </dd></dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd></dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The return of the event hooked or <code>None</code> if no event was found </dd></dl>
 
 </div>
 </div>
@@ -317,6 +321,9 @@
 </div>
 <div class="memdoc">
 
+<p>Delayed script hooks. </p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="a00008.html#ab8b5365ee5ffa348a47107bbc294e7d8" title="Hook an event after a given delay.">EventManager.hook_delayed</a> </dd></dl>
+
 </div>
 </div>
 <a class="anchor" id="a06bd0f175593e4ff4da42fefa77dc540"></a><!-- doxytag: member="pnm::events::eventManager::EventManager::__events" ref="a06bd0f175593e4ff4da42fefa77dc540" args="" -->
@@ -329,6 +336,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Loaded event names. </p>
 
 </div>
 </div>
@@ -343,8 +352,8 @@
 </div>
 <div class="memdoc">
 
-<p>Regular expression for file names. </p>
-<p>Regular expression for event function Open the file and check that the event function exists... </p>
+<p>Flag set once events have been indexed. </p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="a00008.html#a6badecb7250686f59609f426eba0c971" title="Check and index event script files Searches through given script directory for event...">EventManager.indexEvents</a> </dd></dl>
 
 </div>
 </div>
@@ -359,6 +368,8 @@
 </div>
 <div class="memdoc">
 
+<p>Loaded event <a class="el" href="a00063.html" title="Pnm event scripts package loaded in eventsManager.">scripts</a>. </p>
+
 </div>
 </div>
 <a class="anchor" id="ae0f286275792c98e37a46b5f9dd8a841"></a><!-- doxytag: member="pnm::events::eventManager::EventManager::scriptDir" ref="ae0f286275792c98e37a46b5f9dd8a841" args="" -->
@@ -372,13 +383,15 @@
 </div>
 <div class="memdoc">
 
+<p>Script directory name. </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="a00028.html">eventManager.py</a></li>
 </ul>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Mon Mar 29 08:21:50 2010 for PNM by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 30 08:44:27 2010 for PNM by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>

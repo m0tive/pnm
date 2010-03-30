@@ -37,10 +37,53 @@
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#a5b30c034272d3ef1d7aa89e563f6a972">distanceToLine</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#ad646d18cd6fc5f93c853edd39ce6d1a3">distanceToPlane</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#aaf60db1eee26e89972094f9dc8d78717">getPointIn2dTriangle</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Sime Side Technique from: <a href="http://www.blackpawn.com/texts/pointinpoly/default.html">http://www.blackpawn.com/texts/pointinpoly/default.html</a> (accessed 29/04/10).  <a href="#aaf60db1eee26e89972094f9dc8d78717"></a><br/></td></tr>
+<tr><td colspan="2"><h2>Private Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">def&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#a1af117c93ffcb84a02a69259e6df4096">__SameSide2d</a></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>Static maths functions contained within a class. </p>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a1af117c93ffcb84a02a69259e6df4096"></a><!-- doxytag: member="pnm::math::Math::__SameSide2d" ref="a1af117c93ffcb84a02a69259e6df4096" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def pnm.math.Math.__SameSide2d </td>
+          <td>(</td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>_base</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>_ref</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>_p1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>_p2</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a5b30c034272d3ef1d7aa89e563f6a972"></a><!-- doxytag: member="pnm::math::Math::distanceToLine" ref="a5b30c034272d3ef1d7aa89e563f6a972" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -107,11 +150,62 @@
 
 </div>
 </div>
+<a class="anchor" id="aaf60db1eee26e89972094f9dc8d78717"></a><!-- doxytag: member="pnm::math::Math::getPointIn2dTriangle" ref="aaf60db1eee26e89972094f9dc8d78717" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def pnm.math.Math.getPointIn2dTriangle </td>
+          <td>(</td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>_p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>_t1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>_t2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>_t3</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Sime Side Technique from: <a href="http://www.blackpawn.com/texts/pointinpoly/default.html">http://www.blackpawn.com/texts/pointinpoly/default.html</a> (accessed 29/04/10). </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>_p</em>&nbsp;</td><td>- OGRE Vector2 point to be tested </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>_t1</em>&nbsp;</td><td>- OGRE Vector2 first triangle vertex </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>_t2</em>&nbsp;</td><td>- OGRE Vector2 second triangle vertex </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>_t3</em>&nbsp;</td><td>- OGRE Vector2 third triangle vertex </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>True if the point is within the triangle </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="a00040.html">math.py</a></li>
 </ul>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Mon Mar 29 08:21:50 2010 for PNM by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 30 08:44:27 2010 for PNM by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>

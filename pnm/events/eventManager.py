@@ -10,32 +10,50 @@
 
 #-------------------------------------------------------------------------------
 
+
 import re, os, os.path
 from ..logger import Log
 
+
+#-------------------------------------------------------------------------------
 ## A dynamic event loader and manager.
 #  Loads and runs event functions from a python package.
-#  @todo create a generate script function that creates temp scripts (which 
+#  @todo create a generate script function that creates temp %scripts (which 
 #  could be wrote to file on request)
 class EventManager (object):
+
+  #-----------------------------------------------------------------------------
   ## Constructor.
   def __init__(self):
-    self.__indexed = False
-    self.__events = []
-    self.__loadedEvents = {}
-    self.__delays = []
+    
+    ## Script directory name
     self.scriptDir = "scripts"
     
+    ## Flag set once %events have been indexed
+    #  @see EventManager.indexEvents
+    self.__indexed = False
+    ## Loaded event names
+    self.__events = []
+    ## Loaded event scripts
+    self.__loadedEvents = {}
+    ## Delayed script hooks
+    #  @see EventManager.hook_delayed
+    self.__delays = []
+    
+  
+  #-----------------------------------------------------------------------------
   ## Destructor
   def __del__(self):
     Log().info("EventManager deleted")
     
+  
+  #-----------------------------------------------------------------------------
   ## Hook an event, if one exists.
   #  This fires and event if it exists in the _scripts folder.
   #  @param event - Event name.
   #  @param data - Information to be sent to the event.
   #  @todo add note about data.
-  #  @return 
+  #  @return The return of the event hooked or \c None if no event was found
   def hook(self, event, data=None):
     if self.__indexed == False:
       self.indexEvents()
@@ -49,6 +67,8 @@ class EventManager (object):
     
     return None
     
+  
+  #-----------------------------------------------------------------------------
   ## Hook an event after a given delay.
   #  @param delay - Time to wait before hooking the event
   #  @param event - Event name.
@@ -60,12 +80,16 @@ class EventManager (object):
       return True
     return False
     
+  
+  #-----------------------------------------------------------------------------
   ## Check if an event name is within the loaded event list
   #  @param event - Event name.
   #  @return True if the event is loaded
   def hasEvent(self,event):
     return (event in self.__events)
   
+  
+  #-----------------------------------------------------------------------------
   ## Process the delayed event list
   #  @param timeElapsed - The time passed since last update
   def update(self, timeElapsed):
@@ -73,8 +97,8 @@ class EventManager (object):
       for i in range(len(self.__delays)):
         self.__delays[i][0] -= timeElapsed
         if self.__delays[i][0] < 0:
-          ## hook the event, supplying the data and the time elapsed from the
-          ## point at which the event was ment to have been called.
+          # hook the event, supplying the data and the time elapsed from the
+          # point at which the event was ment to have been called.
           self.hook(self.__delays[i][1],self.__delays[i][2],
             {"delayError":(-self.__delays[i][0]),"passed":self.__delays[i][3]})
           completed.append(self.__delays[i])
@@ -82,6 +106,8 @@ class EventManager (object):
       for i in completed:
         self.__delays.remove(i)
         
+  
+  #-----------------------------------------------------------------------------
   ## Check and index event script files
   #  Searches through given script directory for event script files. If the 
   #  files are in the correct format they are added to the event list used by
@@ -100,9 +126,9 @@ class EventManager (object):
     Log().debug("indexing events in \'" + longScriptDir + "\'")
     
     files = os.listdir(longScriptDir)
-    ## Regular expression for file names
+    # Regular expression for file names
     reg = re.compile("(?P<eventName>.+)\.py$")
-    ## Regular expression for event function
+    # Regular expression for event function
     defReg = re.compile("^def *e *\( *\w+, *\w+ *\)")
     for fileName in files:
       match = reg.match(fileName)
@@ -110,7 +136,7 @@ class EventManager (object):
         eventName = match.group("eventName")
         Log().debug("found event file: \'%s\'" % fileName)
         
-        ## Open the file and check that the event function exists...
+        # Open the file and check that the event function exists...
         with open(os.path.join(longScriptDir, fileName),'r') as f:
           found = False
           for line in f:

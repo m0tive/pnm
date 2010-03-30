@@ -10,6 +10,7 @@
 
 #-------------------------------------------------------------------------------
 
+
 import ogre.io.OIS as OIS
 from ..logger import Log
 from ..application import Application as App
@@ -17,10 +18,14 @@ from ..application import Application as App
 import ogre.renderer.OGRE as ogre
 import re
 
+
+#-------------------------------------------------------------------------------
 ## Input manager processing ogre and OIS inputs.
 #  Keyboard and Mouse input are processed
 class InputManager (object):
   
+  #-| Start Nested Classes |----------------------------------------------------
+  #-----------------------------------------------------------------------------
   ## Mouse event listener derived from the OIS.MouseListener
   class __MouseListener(OIS.MouseListener):
     ## Constructor
@@ -47,20 +52,29 @@ class InputManager (object):
     #  inherited from OIS.MouseListener
     def mouseReleased(self,evt,button):
       App().eventManager.hook("input_mouseReleased",self)
+      
+  #-| End Nested Classes |------------------------------------------------------
+  
   
   #-----------------------------------------------------------------------------
-  
   ## Constructor
   def __init__(self):
-    self.__setup = False
+    ## OIS (python) input system
     self.system = None
+    ## Time elapsed since last update
+    #  @see InputManager.update
+    self.timeElapsed = 0
     
+    ## Flag to prevent setup running twice
+    #  @see InputManager.setup
+    self.__setup = False
+    ## Keyboard input object
     self.__keyb = False
+    ## Mouse input object
     self.__mous = False
-    self.__joys = False
-    
+    ## Mouse event listener
+    #  @see InputManager.__MouseListener
     self.__mouseListener = None
-    
     ## Keyboard input maps
     self.__keyMaps = {}
     ## Currently active keyboard maps' names
@@ -68,17 +82,22 @@ class InputManager (object):
     ## Currently pressed keys
     self.__keyDownMap = [False] * 256
     
-    self.timeElapsed = 0
     
+  #-----------------------------------------------------------------------------
+  ## Destructor
   def __del__(self):
     Log().info("InputManager deleted")
     
     
+  #-----------------------------------------------------------------------------
+  ## Safe shutdown and dereference of variables.
+  #  This stops circular references stopping the garbage collection
   def close(self):
     del self.__mouseListener
     Log().info("InputManager closed")
     
     
+  #-----------------------------------------------------------------------------
   ## Setup input systems
   #  Only run once
   def setup(self):
@@ -86,8 +105,8 @@ class InputManager (object):
       raise Exception ("InputManager.setup(...) run twice")
     self.__setup = True
     
-    ## From the ogre demo Simple Application.
-    ## I assume it fixes an issue on 64bit computers...
+    # From the ogre demo Simple Application.
+    # I assume it fixes an issue on 64bit computers...
     import platform
     int64 = False
     for bit in platform.architecture():
@@ -117,27 +136,36 @@ class InputManager (object):
     #Log().debug("%s" % (self.__keyDownMap))
     
     
+  #-----------------------------------------------------------------------------
+  ## Load a keyboard map.
+  #  Keyboard maps are stored using the ogre config file, with a slight 
+  #  extention.
+  #
+  #  example:
+  #
+  #  -----------------------------------<br />
+  #  [Global]  <br />
+  #  r-LSHIFT+ESCAPE=exit  <br />
+  #  p-SPACE=jumpLeft  <br />
+  #  h-CONTROL+Z=run  <br />
+  #  -----------------------------------
+  #
+  #  The line 1 declares the map name. Each of the following lines declares a 
+  #  new key combo %input untill the next map name. Each combo has three parts:
+  #
+  #  [type]-[key]=[event]
+  # 
+  #  type; p - pressed, h - hold, r - released  <br />
+  #  key; keys, using the OIS names (minus "KC_"), joined with "+". In the case
+  #    of CONTROL and SHIFT, the combo is replaced with two seperate combos 
+  #    with both left and right keys in.  <br />
+  #  event; the event name passed to pnm.events.eventManager.EventManager.hook
+  # 
+  #  Note: Each combo can only contain one of each keys.
+  #  
+  #  @param keyboardConfig - Keyboard config file name
   def __setupKeyboard(self,keyboardConfig="keyboard.cfg"):
     Log().debug("Loading keyboard map")
-    
-    # Keyboard maps are stored using the ogre config file, with a slight extention
-    # ---------------------- start example
-    # [Global]
-    # r-LSHIFT+ESCAPE=exit
-    # p-SPACE=jumpLeft
-    # h-CONTROL+Z=run
-    # ---------------------- end
-    # The line 1 declares the map name. Each of the following lines declares a 
-    # new key combo input untill the next map name. Each combo has three parts: 
-    # [type]-[key]=[event]
-    #
-    # type; p - pressed, h - hold, r - released
-    # key; keys, using the OIS names (minus "KC_"), joined with "+". In the case
-    #   of CONTROL and SHIFT, the combo is replaced with two seperate combos 
-    #   with both left and right keys in.
-    # event; the event name passed to pnm.events.eventManager.EventManager.hook
-    #
-    # Note: Each combo can only contain one of each keys.
     
     config = ogre.ConfigFile()
     config.load(keyboardConfig) # load the maps
@@ -164,8 +192,8 @@ class InputManager (object):
         Log().debug("Processing type=%s keys=\'%s\'" % (eventType, keys))
         shift = None
         ctrl = None
-        ## fix shifts and controls
-        ## @todo fix bug in control and shift replacement
+        # fix shifts and controls
+        # @todo fix bug in control and shift replacement
         for i in range(len(keys)):
           if keys[i] == "SHIFT": # replace SHIFT
             shift = i
@@ -186,7 +214,7 @@ class InputManager (object):
             else:
               keys[i] = "LCONTROL"
         
-        ## add matching RSHIFT and/or RCONTROL if needed.
+        # add matching RSHIFT and/or RCONTROL if needed.
         if shift != None and "RSHIFT" in keys:
           keys[shift] = "RSHIFT"
           kMap[eventType].append([keys,item.value])
@@ -219,6 +247,7 @@ class InputManager (object):
     Log().debug("Loaded maps: " + str(self.__keyMaps))
     
     
+  #-----------------------------------------------------------------------------
   ## Process inputs
   #  @param timeElapsed - Time since last update
   def update(self,timeElapsed):
@@ -241,6 +270,10 @@ class InputManager (object):
         App().eventManager.hook("input_keyReleased",i)
     
     
+  #-----------------------------------------------------------------------------
+  ## Check if a key is in a given state, and run it's event
+  #  @param key - Key, in OIS format, to check
+  #  @param itype - Input type, 0 - pressed, 1 - released, 2 - held down
   def __checkKey(self,key,itype):
     for name in self.__activeMaps: ## for current maps
       for keySet in self.__keyMaps[name][itype]: # look through each key set
