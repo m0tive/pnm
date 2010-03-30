@@ -33,6 +33,7 @@ class AgentManager (object):
       self.__man = _manager
       
       self.__goal = None
+      self.__path = None
       
     def getNode(self):
       return self.__node
@@ -50,15 +51,28 @@ class AgentManager (object):
             Math.fcmp(self.__goal.z,pos.z,c):
           App().eventManager.hook("agent_atGoal",self)
           self.__goal = None
+          self.__path = None
         else:
-          mov = (self.__goal - pos).normalisedCopy() * (timeElapsed)
+          target = None
+          if len(self.__path) == 0: # this shouldn't happen, but lets be careful
+            target = self.__goal
+          else:
+            target = self.__path[0].getPosition()
+            if Math.fcmp(target.x, pos.x,c) and \
+                Math.fcmp(target.z, pos.z,c):
+              App().eventManager.hook("agent_atPathNode",self)
+              self.__path.pop(0)
+              target = self.__path[0].getPosition()
+            
+          mov = (target - pos).normalisedCopy() * (timeElapsed)
           
           self.__node.translate(mov.x,mov.y,mov.z)
           pos = self.__node.getPosition()
           
           
           # move it to the right height on the mesh
-          o = self.__man._AgentManager__navigationMesh.getPointOnMesh(pos,self.__triangle)
+          o = self.__man._AgentManager__navigationMesh. \
+                        getPointOnMesh(pos,self.__triangle)
           if o != None:
             self.__node.setPosition(o[0])
             if self.__triangle != o[1]:
@@ -70,6 +84,8 @@ class AgentManager (object):
     
     def setGoal(self,_goal):
       self.__goal = _goal
+      self.__path = self.__man._AgentManager__navigationMesh. \
+                        findPath(self.__node.getPosition(), _goal)
     
   #-----------------------------------------------------------------------------
   

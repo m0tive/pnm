@@ -31,6 +31,7 @@ def e (eman, data):
   
   navMesh = NavigationMesh()
   buildFixedNavMesh(navMesh)
+  navMesh.buildLinks()
   App().agentManager.setNavigationMesh(navMesh)
   
   import ogre.renderer.OGRE as ogre

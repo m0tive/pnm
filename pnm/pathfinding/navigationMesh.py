@@ -37,6 +37,9 @@ class NavigationMesh (object):
       self.__triangles = []
       self.__neighbours = []
       self.__astar_neighbourCosts = {}
+      self.__astar_cost = 0
+      self.__astar_rank = 0
+      self.__astar_parent = None
     
     #def __del__(self):
       #Log().info(self.__class__.__name__ + " deleted")
@@ -45,7 +48,7 @@ class NavigationMesh (object):
       del self.__position
       del self.__triangles
       del self.__neighbours
-      del self.__neighbourCosts
+      del self.__astar_neighbourCosts
       
       #Log().debug(self.__class__.__name__ + " closed")
       
@@ -72,9 +75,19 @@ class NavigationMesh (object):
           ## @todo Take into account change in height when saving cost
           
           self.__neighbours.append(n)
-          self.__neighbourCosts[n] = cost
+          self.__astar_neighbourCosts[n] = cost
           n._Node__neighbours.append(self)
-          n._Node__neighbourCosts[self] = cost
+          n._Node__astar_neighbourCosts[self] = cost
+          
+    def __removeNeighbours(self,L):
+      for n in L:
+        if n in self.__neighbours and n != self:
+          if n == None:
+            raise Exception ("n == None")
+          self.__neighbours.remove(n)
+          del self.__astar_neighbourCosts[n]
+          n.__neighbours.remove(self)
+          del n._Node__astar_neighbourCosts[self]
       
     def __str__ (self):
       return "Node[%f, %f, %f]" % \
@@ -156,6 +169,7 @@ class NavigationMesh (object):
       if v1tris != 1 and v2tris != 1:
         m = v1pos + (v2pos - v1pos)*0.5
         m12 = self.__mesh._NavigationMesh__newNode(m.x, m.y, m.z)
+        self.__nodes.append(m12)
         Log().debug("add midpoint for %d & %d: %d [%.2f, %.2f, %.2f]" % 
           (v1._Node__id, v2._Node__id, m12._Node__id, m.x, m.y, m.z))
         v1._Node__addNeighbours([m12])
@@ -166,6 +180,7 @@ class NavigationMesh (object):
       if v2tris != 1 and v3tris != 1:
         m = v2pos + (v3pos - v2pos)*0.5
         m23 = self.__mesh._NavigationMesh__newNode(m.x, m.y, m.z)
+        self.__nodes.append(m23)
         Log().debug("add midpoint for %d & %d: %d [%.2f, %.2f, %.2f]" % 
           (v2._Node__id, v3._Node__id, m23._Node__id, m.x, m.y, m.z))
         v2._Node__addNeighbours([m23])
@@ -178,6 +193,7 @@ class NavigationMesh (object):
       if v3tris != 1 and v1tris != 1:
         m = v3pos + (v1pos - v3pos)*0.5
         m31 = self.__mesh._NavigationMesh__newNode(m.x, m.y, m.z)
+        self.__nodes.append(m31)
         Log().debug("add midpoint for %d & %d: %d [%.2f, %.2f, %.2f]" % 
           (v3._Node__id, v1._Node__id, m31._Node__id, m.x, m.y, m.z))
         v3._Node__addNeighbours([m31])
@@ -239,7 +255,7 @@ class NavigationMesh (object):
   def __newNode (self,x,y,z):
     for vertex in self.__nodes:
       p = vertex._Node__position
-      if (abs(p.x-x)<1e-6) and (abs(p.y-y)<1e-6) and (abs(p.z-z)<1e-6):
+      if Math.fcmp(p.x,x) and Math.fcmp(p.y,y) and Math.fcmp(p.z,z):
         return vertex
     # else create a new vertex...
     newNode = self.__Node(ogre.Vector3(x,y,z))
@@ -338,19 +354,49 @@ class NavigationMesh (object):
   #-----------------------------------------------------------------------------
   def findPath(self,_start,_goal):
     # test start point and goal point are in triangles,
-    '''output = self.getPointOnMesh(_start)
-    if ouput == None:
+    oStart = self.getPointOnMesh(_start)
+    if oStart == None:
       return None
-    _start.y = output[0]
-    output = self.getPointOnMesh(_goal)'''
+    Log().info("Find path from: " + str(oStart[0]))
+    # find the goal position, use the start triangle as the search start...
+    oGoal = self.getPointOnMesh(_goal, oStart[1])
+    if oGoal == None:
+      return None
+    Log().info("... to: " + str(oGoal[0]))
     
     # Create start and end node, linking them with all the nodes in their 
     # respective triangle
+    nStart = self.__newNode(oStart[0].x,oStart[0].y,oStart[0].z)
+    oStart[1]._Triangle__nodes.append(nStart)
+    nStart._Node__addNeighbours(oStart[1].getVertices())
+    
+    nGoal = self.__newNode(oGoal[0].x,oGoal[0].y,oGoal[0].z)
+    oGoal[1]._Triangle__nodes.append(nGoal)
+    nGoal._Node__addNeighbours(oGoal[1].getVertices())
     
     # Calculate the path using A*
-    path = self.__astar_calculatePath()
+    path = self.__astar_calculatePath(nStart, nGoal)
+    
+    Log().info("Found path; length %d:" % len(path))
+    for n in path:
+      Log().info("   %s" % n.getPosition())
     
     # Delete start and end node
+    # @todo delete start and end!
+    oStart[1]._Triangle__nodes.remove(nStart)
+    nStart._Node__removeNeighbours(oStart[1].getVertices())
+    oGoal[1]._Triangle__nodes.remove(nGoal)
+    nGoal._Node__removeNeighbours(oGoal[1].getVertices())
+    
+    self.__nodes.remove(nStart)
+    self.__nodes.remove(nGoal)
+    
+    del nStart._Node__triangles
+    del nGoal._Node__triangles
+    
+    # Don't fully delete nStart and nGoal as we'll need them in the path. Once 
+    # the path has been finished with, the garbage collector will clean up after
+    # us :)
     
     return path
     
@@ -390,7 +436,9 @@ class NavigationMesh (object):
               self.__astar_heuristic(neighbour,_goal)
           neighbour._Node__astar_parent = current
     
-    return self.__astar_reconstructPath(_goal)
+    
+    path = self.__astar_reconstructPath(_goal, [])
+    return path
     
     
   #-----------------------------------------------------------------------------
@@ -414,11 +462,11 @@ class NavigationMesh (object):
     
     
   #-----------------------------------------------------------------------------
-  def __astar_reconstructPath(self, _node, _path=[]):
-    _path.insert(0,_node)
+  def __astar_reconstructPath(self, _node, io_path):
+    io_path.insert(0,_node)
     if _node._Node__astar_parent == None:
-      return _path
-    return self.__astar_reconstructPath(_node._Node__astar_parent, _path)
+      return io_path
+    return self.__astar_reconstructPath(_node._Node__astar_parent, io_path)
     
     
   #-----------------------------------------------------------------------------
