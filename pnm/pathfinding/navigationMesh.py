@@ -198,6 +198,19 @@ class NavigationMesh (object):
         self.__normal = ((p2 - p1).crossProduct(p3 - p1)).normalisedCopy()
       return self.__normal
       
+    def getCentre(self):
+      div3 = 1.0/3.0
+      cX = (self.__nodes[0]._Node__position.x + 
+            self.__nodes[1]._Node__position.x + 
+            self.__nodes[2]._Node__position.x) * div3
+      cY = (self.__nodes[0]._Node__position.y + 
+            self.__nodes[1]._Node__position.y + 
+            self.__nodes[2]._Node__position.y) * div3
+      cZ = (self.__nodes[0]._Node__position.z + 
+            self.__nodes[1]._Node__position.z + 
+            self.__nodes[2]._Node__position.z) * div3
+      return ogre.Vector3(cX, cY, cZ)
+      
       
     def __str__(self):
       return "Triangle[%d, %d, %d]" % (self.__nodes[0].getId(), 
@@ -290,37 +303,36 @@ class NavigationMesh (object):
   #  @todo Change this to a itterative approche. This will miss close neighbours
   #    and pick distant vertically aligned triangles (which we don't want)
   def getPointOnMesh(self, _point, _firstTri=None, _reset=True):
-    if _reset:
-      self.__resetTraingleTest()
       
     if not _firstTri:
       _firstTri = self.__triangles[0]
+      
+    openT = [_firstTri]
+    closedT = []
     
-    point2d = ogre.Vector2(_point.x, _point.z)
-    tri0 = _firstTri.getVertexPosition(0)
-    tri0 = ogre.Vector2(tri0.x, tri0.z)
-    tri1 = _firstTri.getVertexPosition(1)
-    tri1 = ogre.Vector2(tri1.x, tri1.z)
-    tri2 = _firstTri.getVertexPosition(2)
-    tri2 = ogre.Vector2(tri2.x, tri2.z)
-    
-    # Test triangle
-    output = Math.getPointIn2dTriangle(point2d, tri0, tri1, tri2)
-    if output != None:
-      ## Calculate z coordinate
-      return 0.0, _firstTri
-    # Set tested flag
-    _firstTri._tested = True
-    
-    # Test triangles neighbours (if untested)
-    output = None
-    for tri in _firstTri.getNeighbours():
-      if tri._tested == False:
-        output = self.getPointOnMesh(_point,tri,False)
-        if output != None:
-          return output
-    
-    # Point wasn't on mesh
+    p2d = ogre.Vector2(_point.x, _point.z)
+    it = 0
+    while len(openT) != 0:
+      current = openT.pop(0)
+      
+      n = current.getVertices()
+      v = [n[0].getPosition(), n[1].getPosition(), n[2].getPosition()]
+      v2d = [ogre.Vector2(v[0].x, v[0].z),
+             ogre.Vector2(v[1].x, v[1].z),
+             ogre.Vector2(v[2].x, v[2].z)]
+      output = Math.getPointIn2dTriangle(p2d, v2d[0], v2d[1], v2d[2])
+      if output != False: # point within triangle volume
+        # calculate y coordinate
+        vect = ogre.Vector3(_point.x, _point.y + 1, _point.z)
+        r = Math.getLinePlaneIntersection(_point, vect, current.getNormal(), v[0])
+        return r, current
+      else:
+        closedT.append(current)
+        for tri in current.getNeighbours():
+          if (tri not in openT) and (tri not in closedT):
+            openT.append(tri)
+      it += 1
+      #Log().debug("trying harder %d: open - %d, closed - %d" % (it,len(openT), len(closedT)))
     return None
     
   #-----------------------------------------------------------------------------

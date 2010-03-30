@@ -99,8 +99,8 @@ class EventManager (object):
         if self.__delays[i][0] < 0:
           # hook the event, supplying the data and the time elapsed from the
           # point at which the event was ment to have been called.
-          self.hook(self.__delays[i][1],self.__delays[i][2],
-            {"delayError":(-self.__delays[i][0]),"passed":self.__delays[i][3]})
+          self.hook(self.__delays[i][1],
+            {"delayError":abs(self.__delays[i][0]),"passed":self.__delays[i][2]})
           completed.append(self.__delays[i])
           
       for i in completed:

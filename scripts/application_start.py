@@ -27,11 +27,19 @@ def e (eman, data):
   agent = App().agentManager.newAgent(agentOuterNode)
   agentEntity, agentNode = App().renderManager.displayMesh("agent", agent.getNode())
   
-  agentNode.scale(2,4,1.5)
+  agentNode.scale(2,2,2)#4,1.5)
   
   navMesh = NavigationMesh()
   buildFixedNavMesh(navMesh)
   App().agentManager.setNavigationMesh(navMesh)
+  
+  import ogre.renderer.OGRE as ogre
+  output = navMesh.getPointOnMesh(ogre.Vector3(-2, 0, 6.5))
+  if output != None:
+    agent.getNode().setPosition(output[0])
+    
+  #navMesh.getTriangle(1).getCentre()
+  agent.setGoal(navMesh.getTriangle(2).getCentre())
   
   
   # start test code ------------------------------------------------------------
@@ -39,7 +47,7 @@ def e (eman, data):
   firstNode = navMesh.getNode(0)
   Log().debug(firstNode)
   Log().debug(firstNode.getPosition())
-  agent.getNode().setPosition(firstNode.getPosition())
+  #agent.getNode().setPosition(firstNode.getPosition())
   Log().debug(agent.getNode().getPosition())
   
   tri = navMesh.getTriangle(1)
@@ -61,8 +69,10 @@ def e (eman, data):
   Log().debug((tri1.x, tri1.y, tri1.z))
   Log().debug((tri2.x, tri2.y, tri2.z))
   
-  Log().debug(Math.getPointIn2dTriangle(point2d, tri02d, tri12d, tri22d))
-  Log().debug(navMesh.getPointOnMesh(point3d))
+  #output = Math.getPointIn2dTriangle(point2d, tri02d, tri12d, tri22d)
+  output = navMesh.getPointOnMesh(point3d)
+  #if output != None:
+  #  agent.getNode().setPosition(output[0])
   
   # end test code --------------------------------------------------------------
   

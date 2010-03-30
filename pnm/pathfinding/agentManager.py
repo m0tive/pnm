@@ -12,6 +12,7 @@
 
 from ..logger import Log
 from ..application import Application as App
+from ..math import Math
 
 
 #import ogre.renderer.OGRE as ogre
@@ -23,17 +24,52 @@ class AgentManager (object):
   
   ## An agent
   class __Agent (object):
-    def __init__(self, node):
+    def __init__(self, node, _manager):
       self.__node = node
       self.__rotation = 0
-      self.__velocity = 1
+      self.__velocity = 0
       self.__triangle = None
+      
+      self.__man = _manager
+      
+      self.__goal = None
       
     def getNode(self):
       return self.__node
       
+    def getManager(self):
+      return self.__man
+      
     def update(self, timeElapsed):
-      self.__node.translate(0,0,self.__velocity * timeElapsed)
+      pos = self.__node.getPosition()
+      
+      
+      if self.__goal != None:
+        c = 0.001
+        if Math.fcmp(self.__goal.x,pos.x,c) and \
+            Math.fcmp(self.__goal.z,pos.z,c):
+          App().eventManager.hook("agent_atGoal",self)
+          self.__goal = None
+        else:
+          mov = (self.__goal - pos).normalisedCopy() * (timeElapsed)
+          
+          self.__node.translate(mov.x,mov.y,mov.z)
+          pos = self.__node.getPosition()
+          
+          
+          # move it to the right height on the mesh
+          o = self.__man._AgentManager__navigationMesh.getPointOnMesh(pos,self.__triangle)
+          if o != None:
+            self.__node.setPosition(o[0])
+            if self.__triangle != o[1]:
+              Log().debug(o[1])
+              oldTri = self.__triangle
+              App().eventManager.hook("agent_changeTriangle", [self,o[1]])
+              self.__triangle = o[1]
+          #self.__node.translate(0,0,self.__velocity * timeElapsed)
+    
+    def setGoal(self,_goal):
+      self.__goal = _goal
     
   #-----------------------------------------------------------------------------
   
@@ -53,7 +89,7 @@ class AgentManager (object):
       if a.getNode() == node:
         return a
     
-    newAgent = self.__Agent(node)
+    newAgent = self.__Agent(node,self)
     self.__agents.append(newAgent)
     return newAgent
     
@@ -64,6 +100,9 @@ class AgentManager (object):
     if len(navMesh.getTriangles()) == 0:
       raise Exception ("NavigationMesh is empty")
     self.__navigationMesh = navMesh
+    
+  def getNavigationMesh(self):
+    return self.__navigationMesh
     
   def update(self,timeElapsed):
     for ag in self.__agents:
