@@ -1,12 +1,10 @@
 ## @file scripts/render_frameStarted.py
 #  @brief Script file, see scripts.render_frameStarted
-#  @author Peter Dodds
-#  @version 1.0
-#  @date 28/03/10
-#  @todo make ncca compliant
 
 ## @package scripts.render_frameStarted
-#  @brief 
+#  @brief FrameStart event hooked just prior to the frame beggining rendering.
+#  This is hooked by pnm.renderer.renderManager.FrameListener
+#  <br> The \c data passed is a reference to the frameStart event
 
 #-------------------------------------------------------------------------------
 

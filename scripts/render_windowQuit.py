@@ -1,12 +1,10 @@
 ## @file scripts/render_windowQuit.py
 #  @brief Script file, see scripts.render_windowQuit
-#  @author Peter Dodds
-#  @version 1.0
-#  @date 28/03/10
-#  @todo make ncca compliant
 
 ## @package scripts.render_windowQuit
-#  @brief 
+#  @brief Window quit event.
+#  This is hooked by pnm.renderer.renderManager.WindowEventListener.
+#  <br> The \c data passed is a reference to the OGRE RenderWindow object
 
 #-------------------------------------------------------------------------------
 

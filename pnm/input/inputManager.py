@@ -164,11 +164,11 @@ class InputManager (object):
   #
   #  example:
   #
-  #  -----------------------------------<br />
-  #  [Global]  <br />
-  #  r-LSHIFT+ESCAPE=exit  <br />
-  #  p-SPACE=jumpLeft  <br />
-  #  h-CONTROL+Z=run  <br />
+  #  -----------------------------------<br>
+  #  [Global]  <br>
+  #  r-LSHIFT+ESCAPE=exit  <br>
+  #  p-SPACE=jumpLeft  <br>
+  #  h-CONTROL+Z=run  <br>
   #  -----------------------------------
   #
   #  The line 1 declares the map name. Each of the following lines declares a 
@@ -176,10 +176,10 @@ class InputManager (object):
   #
   #  [type]-[key]=[event]
   # 
-  #  type; p - pressed, h - hold, r - released  <br />
+  #  type; p - pressed, h - hold, r - released  <br>
   #  key; keys, using the OIS names (minus "KC_"), joined with "+". In the case
   #    of CONTROL and SHIFT, the combo is replaced with two seperate combos 
-  #    with both left and right keys in.  <br />
+  #    with both left and right keys in.  <br>
   #  event; the event name passed to pnm.events.eventManager.EventManager.hook
   # 
   #  Note: Each combo can only contain one of each keys.

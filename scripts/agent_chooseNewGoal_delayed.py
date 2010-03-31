@@ -1,8 +1,10 @@
-## @file scripts/agent_chooseNewGoal.py
-#  @brief Script file, see scripts.agent_chooseNewGoal
+## @file scripts/agent_chooseNewGoal_delayed.py
+#  @brief Script file, see scripts.agent_chooseNewGoal_delayed
 
-## @package scripts.agent_chooseNewGoal
-#  @brief ...
+## @package scripts.agent_chooseNewGoal_delayed
+#  @brief Agent has should choose a new goal location.
+#  This is a delayed event, setup in agent_atGoal
+#  <br> The \c data passed is a reference to the __Agent class
 
 #-------------------------------------------------------------------------------
 

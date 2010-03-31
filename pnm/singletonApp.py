@@ -21,9 +21,9 @@ from events import EventManager
 ## A generalised, simple, singleton %application class containing logging
 #    and event managment.
 #
-#  Singleton pattern taken from post on Stackoverflow.com by "modi" <br />
+#  Singleton pattern taken from post on Stackoverflow.com by "modi" <br>
 #  http://stackoverflow.com/questions/42558/python-and-the-singleton-pattern/1810367#1810367
-#   <br />Accessed: 9th March 2010
+#   <br>Accessed: 9th March 2010
 class SingletonApp (object):
 
   ## Instance of the singleton class

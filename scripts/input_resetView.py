@@ -1,12 +1,11 @@
 ## @file scripts/input_resetView.py
 #  @brief Script file, see scripts.input_resetView
-#  @author Peter Dodds
-#  @version 1.0
-#  @date 28/03/10
-#  @todo make ncca compliant
 
 ## @package scripts.input_resetView
-#  @brief 
+#  @brief Reset the camera's position.
+#  This is hooked by a keypress (noramlly HOME) in 
+#    pnm.input.inputManager.InputManager.
+#  <br> The \c data passed is a reference to inputManager.
 
 #-------------------------------------------------------------------------------
 

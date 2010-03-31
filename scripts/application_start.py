@@ -1,12 +1,11 @@
 ## @file scripts/application_start.py
 #  @brief Script file, see scripts.application_start
-#  @author Peter Dodds
-#  @version 1.0
-#  @date 28/03/10
-#  @todo make ncca compliant
 
 ## @package scripts.application_start
-#  @brief 
+#  @brief Application start event
+#  This is hooked by pnm.application.Application.start before entering the 
+#    render loop.
+#  <br> No \c data is passed.
 
 #-------------------------------------------------------------------------------
 

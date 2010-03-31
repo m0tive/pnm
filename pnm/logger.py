@@ -20,15 +20,15 @@ import os, os.path
 #  To create a log entity use the python %logger functions: debug(), info(), 
 #    warning(), error() and critical()
 #
-#  eg:<br /> 
+#  eg:<br> 
 #  Log().critical("Houston we have a problem")
 #
 #  These function calls will then send the log string to the output stream and 
 #    to the log file.
 #  
-#  Singleton pattern taken from post on Stackoverflow.com by "modi"<br />
+#  Singleton pattern taken from post on Stackoverflow.com by "modi"<br>
 #  http://stackoverflow.com/questions/42558/python-and-the-singleton-pattern/1810367#1810367
-#  <br />Accessed: 9th March 2010
+#  <br>Accessed: 9th March 2010
 #
 #  @see Python logging.logger
 class Log (object):

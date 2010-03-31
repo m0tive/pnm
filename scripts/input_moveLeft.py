@@ -1,12 +1,10 @@
 ## @file scripts/input_moveLeft.py
 #  @brief Script file, see scripts.input_moveLeft
-#  @author Peter Dodds
-#  @version 1.0
-#  @date 28/03/10
-#  @todo make ncca compliant
 
 ## @package scripts.input_moveLeft
-#  @brief 
+#  @brief Move the camera left (positive in the x-axis).
+#  This is hooked by a keypress in pnm.input.inputManager.InputManager
+#  <br> The \c data passed is a reference to inputManager
 
 #-------------------------------------------------------------------------------
 
