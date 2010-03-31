@@ -64,7 +64,7 @@ class NavigationMesh (object):
     def getNeighbours(self):
       return list(self.__neighbours)
       
-    def __addNeighbours(self,L):
+    def __addNeighbours(self,L,_cModifier = 1):
       for n in L:
         if n not in self.__neighbours and n != self:
           if n == None:
@@ -75,9 +75,9 @@ class NavigationMesh (object):
           ## @todo Take into account change in height when saving cost
           
           self.__neighbours.append(n)
-          self.__astar_neighbourCosts[n] = cost
+          self.__astar_neighbourCosts[n] = cost * _cModifier
           n._Node__neighbours.append(self)
-          n._Node__astar_neighbourCosts[self] = cost
+          n._Node__astar_neighbourCosts[self] = cost * _cModifier
           
     def __removeNeighbours(self,L):
       for n in L:
@@ -172,8 +172,7 @@ class NavigationMesh (object):
         self.__nodes.append(m12)
         Log().debug("add midpoint for %d & %d: %d [%.2f, %.2f, %.2f]" % 
           (v1._Node__id, v2._Node__id, m12._Node__id, m.x, m.y, m.z))
-        v1._Node__addNeighbours([m12])
-        v2._Node__addNeighbours([m12])
+        m12._Node__addNeighbours([v1,v2],0.9)
       else:
         v1._Node__addNeighbours([v2])
         
@@ -183,10 +182,9 @@ class NavigationMesh (object):
         self.__nodes.append(m23)
         Log().debug("add midpoint for %d & %d: %d [%.2f, %.2f, %.2f]" % 
           (v2._Node__id, v3._Node__id, m23._Node__id, m.x, m.y, m.z))
-        v2._Node__addNeighbours([m23])
-        v3._Node__addNeighbours([m23])
+        m23._Node__addNeighbours([v3,v2],0.9)
         if m12 != None:
-          m23._Node__addNeighbours([m12])
+          m23._Node__addNeighbours([m12],0.8)
       else:
         v2._Node__addNeighbours([v3])
         
@@ -196,12 +194,11 @@ class NavigationMesh (object):
         self.__nodes.append(m31)
         Log().debug("add midpoint for %d & %d: %d [%.2f, %.2f, %.2f]" % 
           (v3._Node__id, v1._Node__id, m31._Node__id, m.x, m.y, m.z))
-        v3._Node__addNeighbours([m31])
-        v1._Node__addNeighbours([m31])
+        m31._Node__addNeighbours([v3,v1],0.9)
         if m12 != None:
-          m31._Node__addNeighbours([m12])
+          m31._Node__addNeighbours([m12],0.8)
         if m23 != None:
-          m31._Node__addNeighbours([m23])
+          m31._Node__addNeighbours([m23],0.8)
       else:
         v3._Node__addNeighbours([v1])
         
