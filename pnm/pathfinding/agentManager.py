@@ -46,6 +46,17 @@ class AgentManager (object):
       #  @see navigationMesh.NavigationMesh.findPath
       self.__path = None
       
+      
+    #---------------------------------------------------------------------------
+    ## Safe shutdown and dereference of variables.
+    #  This stops circular references stopping the garbage collection
+    def close(self):
+      self.__node = None
+      self.__man = None
+      self.__triangle = None
+      self.__goal = None
+      self.__path = None
+      
     
     #---------------------------------------------------------------------------
     ## Get SceneNode the agent is attached to
@@ -140,6 +151,15 @@ class AgentManager (object):
   ## Safe shutdown and dereference of variables.
   #  This stops circular references stopping the garbage collection
   def close(self):
+    for agent in self.__agents:
+      agent.close()
+    
+    if self.__navigationMesh != None:
+      self.__navigationMesh.close()
+      
+    del self.__agents
+    del self.__navigationMesh
+    
     Log().info(self.__class__.__name__ + " closed")
     
     
